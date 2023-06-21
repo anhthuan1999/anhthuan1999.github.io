@@ -3,20 +3,20 @@
 # -----------------------------------------------------------------------------
 
 title: blank # the website title (if blank, full name will be used instead)
-first_name: You
-middle_name: R.
-last_name: Name
-email: you@example.com
+first_name: Anh-Thuan
+middle_name: 
+last_name: Tran
+email: thuantran@pukyong.ac.kr
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
   A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
 footer_text: >
   Powered by <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme.
   Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
   Photos from <a href="https://unsplash.com" target="_blank">Unsplash</a>.
-keywords: jekyll, jekyll-theme, academic-website, portfolio-website  # add your own keywords or leave empty
+keywords: artificial intelligence, point cloud, deep learning, transformer  # add your own keywords or leave empty
 
 lang: en # the language of your site (for example: en, fr, cn, ru, etc.)
-icon: ⚛️  # the emoji used as the favicon (alternatively, provide image name in /assets/img/)
+icon:  # the emoji used as the favicon (alternatively, provide image name in /assets/img/)
 
 url: https://anhthuan1999.github.io # the base hostname & protocol for your site
 baseurl: # the subpath of your site, e.g. /blog/
@@ -71,16 +71,16 @@ og_image: # The site-wide (default for all links) Open Graph preview image
 # Social integration
 # -----------------------------------------------------------------------------
 
-github_username: # your GitHub user name
+github_username: anhthuan1999 # your GitHub user name
 gitlab_username: # your GitLab user name
-twitter_username: # your Twitter handle
+twitter_username: anhthuan1999 # your Twitter handle
 mastodon_username: # your mastodon instance+username in the format instance.tld/@username
-linkedin_username: # your LinkedIn user name
+linkedin_username: thuan-tran-anh-622370146 # your LinkedIn user name
 telegram_username: # your Telegram user name
-scholar_userid: # your Google Scholar ID
+scholar_userid: bIdARZMAAAAJ # your Google Scholar ID
 semanticscholar_id: # your Semantic Scholar ID
 whatsapp_number: # your WhatsApp number (full phone number in international format. Omit any zeroes, brackets, or dashes when adding the phone number in international format.)
-orcid_id: # your ORCID ID
+orcid_id: 0000-0003-2134-5975 # your ORCID ID
 medium_username: # your Medium username
 quora_username: # your Quora username
 publons_id: # your ID on Publons
@@ -93,7 +93,7 @@ work_url: # work page URL
 keybase_username: # your keybase user name
 wikidata_id: # your wikidata id
 wikipedia_id: # your wikipedia id (Case sensitive)
-dblp_url: # your DBLP profile url
+dblp_url: https://dblp.org/pid/340/6139.html # your DBLP profile url
 stackoverflow_id: # your stackoverflow id
 kaggle_id: # your kaggle id
 lastfm_id: # your lastfm id
@@ -106,7 +106,7 @@ youtube_id: # your youtube channel id (youtube.com/@<youtube_id>)
 discord_id: # your discord id (18-digit unique numerical identifier)
 
 contact_note: >
-  You can even add a little note about which of these is the best way to reach you.
+  Please feel free to contact me through email or Linkedin if you have any questions.
 
 # -----------------------------------------------------------------------------
 # Analytics and search engine verification

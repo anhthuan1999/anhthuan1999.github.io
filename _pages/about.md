@@ -1,26 +1,22 @@
 ---
 layout: about
-title: about
+title: About
 permalink: /
-subtitle: <a href='#'>Affiliations</a>. Address. Contacts. Moto. Etc.
+subtitle: Master Student at <a href='http://ai_conv.pknu.ac.kr/eng/'>Deparment of Artificial Intelligence Convergence</a>, <a href='https://www.pknu.ac.kr/eng'>Pukyong National University</a>
 
 profile:
   align: right
-  image: prof_pic.jpg
+  image: thuan_pic.jpg
   image_circular: false # crops the image to make it circular
-  address: >
-    <p>555 your office number</p>
-    <p>123 your address street</p>
-    <p>Your City, State 12345</p>
 
 news: true  # includes a list of news items
-latest_posts: true  # includes a list of the newest posts
+latest_posts: false  # includes a list of the newest posts
 selected_papers: true # includes a list of papers marked as "selected={true}"
 social: true  # includes social icons at the bottom of the page
 ---
 
-Write your biography here. Tell the world about yourself. Link to your favorite [subreddit](http://reddit.com). You can put a picture in, too. The code is already in, just name your picture `prof_pic.jpg` and put it in the `img/` folder.
+Hi, I'm Thuan, a final-year Master student at <a href='http://ai_conv.pknu.ac.kr/eng/'>Deparment of Artificial Intelligence Convergence</a>, <a href='https://www.pknu.ac.kr/eng'>Pukyong National University</a> under the supervision of Professor Ki-Ryong Kwon with MCSP Lab. Before that, I graduated from <a href='http://en.uel.edu.vn/'>University of Economics and Law, VNU-HCM</a> with a Bachelor's degree in <a href='https://is.uel.edu.vn/?PageId=4f38865c-525f-45ac-847c-538340d12274/'>Ecommerce, Faculty of Information Systems</a> and be advised by Professor Hoanh-Su Le. 
 
-Put your address / P.O. box / other info right below your picture. You can also disable any of these elements by editing `profile` property of the YAML header of your `_pages/about.md`. Edit `_bibliography/papers.bib` and Jekyll will render your [publications page](/al-folio/publications/) automatically.
+<b>Research</b>: My current research focuses on point cloud processing. In particular, I work on large-scale point cloud semantic segmentation using Transformer architecture under limited point annotations. Besides, weakly-supervised point cloud panoptic segmenation is also explored to process point cloud more explicitly and has a vital role in real-world applications such as autonomous driving.
 
-Link to your social media connections, too. This theme is set up to use [Font Awesome icons](http://fortawesome.github.io/Font-Awesome/) and [Academicons](https://jpswalsh.github.io/academicons/), like the ones below. Add your Facebook, Twitter, LinkedIn, Google Scholar, or just disable all of them.
+
