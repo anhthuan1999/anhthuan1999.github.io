@@ -2,96 +2,110 @@
   type: map
   contents:
     - name: Full Name
-      value: Albert Einstein
+      value: Anh-Thuan Tran
     - name: Date of Birth
-      value: 14th March 1879
+      value: 24th March 1999
     - name: Languages
-      value: English, German
-
-- title: Education
-  type: time_table
-  contents:
-    - title: PhD
-      institution: University of Zurich, Zurich, Switzerland
-      year: 1905
-      description:
-        - Description 1.
-        - Description 2.
-        - title: Description 3.
-          contents:
-            - Sub-description 1.
-            - Sub-description 2.
-    - title: Federal teaching diploma
-      institution: Eidgenössische Technische Hochschule, Zurich, Switzerland
-      year: 1900
-      description:
-        - Description 1.
-        - Description 2.
-
-- title: Experience
-  type: time_table
-  contents:
-    - title: Professor of Theoretical Physics
-      institution: Institute for Advanced Study, Princeton University
-      year: 1933 - 1955
-      description:
-        - Description 1.
-        - Description 2.
-        - title: Description 3.
-          contents:
-            - Sub-description 1.
-            - Sub-description 2.
-    - title: Visiting Professor
-      institution: California Institute of Technology, Pasadena, California, US
-      year: 1933
-      description:
-        - Description 1.
-        - Description 2.
-
-    - title: Director
-      institution: Kaiser Wilhelm Institute for Physics, Berlin, Germany.
-      year: 1917-1933
-
-    - title: Professor of Theoretical Physics
-      institution: Karl-Ferdinand University, Prague, Czechoslovakia
-      year: 1911 - 1917
-      description:
-
-    - title: Associate Professor of Theoretical Physics
-      institution: University of Zurich, Zurich, Switzerland
-      year: 1909 - 1911
-
-- title: Open Source Projects
-  type: time_table
-  contents:
-    - title: <a href="https://github.com/alshedivat/al-folio">al-folio</a>
-      year: 2015-now
-      description: A beautiful, simple, clean, and responsive Jekyll theme for academics.
-
-- title: Honors and Awards
-  type: time_table
-  contents:
-    - year: 1921
-      items: 
-        - Nobel Prize in Physics 
-        - Matteucci Medal
-    - year: 2029
-      items: 
-        - Max Planck Medal
+      value: English, Vietnamese
 
 - title: Academic Interests
   type: nested_list
   contents:
-    - title: Topic 1.
+    - title: Point cloud processing
       items: 
-        - Description 1.
-        - Description 2.
-    - title: Topic 2.
+        - Weakly-supervised segmentation
+        - Generative and Reconstruction
+    - title: 3D reasoning
       items:
-        - Description 1.
-        - Description 2.
-
-- title: Other Interests
-  type: list
+        - Visual reasoning using 3D point cloud and NLP
+        
+- title: Education
+  type: time_table
   contents:
-    - <u>Hobbies:</u> Hobby 1, Hobby 2, etc.
+    - title: Master of Engineering
+      institution: Deparment of Artificial Intelligence Convergence, Pukyong National University, Busan, South Korea
+      year: 2022 - now
+      description:
+        - "GPA: 4.4/4.5"
+        - title: Relevant coursework
+          contents:
+            - Neural Network
+            - Statistical Learning Model
+            - Optimization for AI
+            - Artificial Intelligence Programming
+            - Advanced Artificial Intelligence
+    - title: Bachelor of Economics
+      institution: Faculty of Information Systems, University of Economics and Law, Vietnam National University, Ho Chi Minh City, Vietnam
+      year: 2017 - 2021
+      description:
+        - "GPA: 7.8/10"
+        - title: Relevant coursework
+          contents:
+            - Data Structure and Algorithm
+            - Probability Theory
+            - Information System Analysis and Design
+            - Web Data Analysis 
+            - E-Commerce Security
+            - E-Commerce Strategies
+            - E-Payment
+
+- title: Experience
+  type: time_table
+  contents:
+    - title: Graduate Research Assistant
+      institution: MCSP Lab, Pukyong National University, Busan, South Korea.
+      year: 2022 - now
+      description:
+      - Working on 4D point cloud panoptic segmentation. The architecture is build upon point-based methods and previous Transformer attention mechanisms.
+      - Proposing point-based Transformer architecture in weakly-supervised 3D point cloud segmentation. The network outperform other fully-supervised methods using only 0.1% point annotations.
+
+    - title: Data Research Analyst
+      institution: Tuan Loc Commodities, Ho Chi Minh City Vietnam.
+      year: 2021-2022
+      description:
+      - Exporting reports monthly in docx and pptx format automatically using python with data visualization and corresponding text description directly from SQL Server.
+      - Building forecasting model and backtest strategy to forecast future price in the coffee market combined with the actual stock. Manage and update master data with predefined features, Building appropriate the backtest strategy and compare with current strategies (Momentum, Mean Reverse, Pair Trading,..)
+
+    - title: Undergraduate Research Assistant
+      institution: GB AI Lab, Ho Chi Minh City, Vietnam.
+      year: 2020 - 2021
+      description:
+        - Building complete solutions for smart classroom applied AI specialized in computer vision including face recognition and emotion detection.
+        - Implement machine learning and deep learning model for face detection. Transfer learning by using deep learning models for emotion classification.
+        - Building clustering algorithm that suggest location for school planning and visualizing results on map.
+        - Proposing function that covers the operating cost and individual cost for changing school location and algorithm to suggest students change current school with appropriate capacity.
+
+- title: Technical Projects
+  type: time_table
+  contents:
+    - title: Point cloud segmentation
+      year: 2022 - now
+      description:
+      - Building point-based Transformer network for segmentation tasks using limited point annotations in large-scale indoor and outdoor point clouds.
+      - Proposing Transformer architecture for panoptic segmentation in point cloud sequences.
+    - title: Algorithmic trading
+      year: 2021 - 2022
+      description: Applying machine learning model in forecasting (Prophet) and building corresponding backtesting strategies on Backtrader platform.
+    - title: AI-based Smart Classroom
+      year: 2021 - 2022
+      description: 
+      - Applying current machine learning models in smart classrooms for attendance, exam verification, and teaching evaluation tasks.
+      - Analysing model outputs and visualizing results into corresponding charts.
+    - title: Opinion mining with Vietnamese text
+      year: 2019 - 2020
+      description: 
+      - "News: Gather news, comments in the Smartphone industry in Vietnamese online newspapers and using machine learning to classify them."
+      - "Product reviews: Building the semi-supervised sentimental model to classify online reviews on an e-commerce market."
+
+- title: Honors and Awards
+  type: time_table
+  contents:
+    - year: 2022
+      items: 
+        - Google Data Analytics Certificate
+    - year: 2021
+      items: 
+        - IBM Data Science Certificate
+
+
+
