@@ -1,21 +1,18 @@
 ---
 ---
-#inproceedings{pointct2024,
+@inproceedings{pointct2024,
   abbr={ICCE},
   author       = {Anh{-}Thuan Tran and
                   Hoanh{-}Su Le and
                   Suk{-}Hwan Lee and
                   Ki{-}Ryong Kwon},
   title        = {PointCT: Point Central Transformer Network for Weakly Supervised Point Cloud Semantic Segmentation},
-  booktitle    = {Preprint},
-  pages        = {1--4},
+  booktitle    = {IEEE/CVF Winter Conference on Applications of Computer Vision (WACV)},
   publisher    = {{IEEE}},
-  year         = {2023},
-  url          = {},
-  doi          = {},
-  selected     = false,
-  citation     = 1,
-  abstract     = {}
+  year         = {2024},
+  selected     = true,
+  abstract     = {Although point cloud segmentation has a principal role in 3D understanding, annotating fully large-scale scenes for this task can be costly and time-consuming. To resolve this issue, we propose Point Central Transformer (PointCT), a novel end-to-end trainable transformer network for weaklysupervised point cloud semantic segmentation. Divergent from prior approaches, our method addresses limited point annotation challenges exclusively based on 3D points through central-based attention. By employing two embedding processes, our attention mechanism integrates global features across neighborhoods, thereby effectively enhancing unlabeled point representations. Simultaneously, the interconnections between central points and their distinct neighborhoods are bidirectional cohered. Position encoding is further applied to enforce geometric features and improve overall performance. Notably, PointCT achieves outstanding performance under various labeled point settings without additional supervision. Extensive experiments on public datasets S3DIS, ScanNet-V2, and STPLS3D demonstrate the superiority of our proposed approach over other state-of-the-art methods.},
+  dimensions   = {true}
 }
 
 @article{lgpaaccess2023,
@@ -53,7 +50,6 @@
   html         = {https://doi.org/10.1109/ICCE56470.2023.10043500},
   doi          = {10.1109/ICCE56470.2023.10043500},
   selected     = true,
-  citation     = 1,
   abstract     = {Due to the massive number of points and irregular structure, there is challenging to determine local graph relationships in large-scale point clouds. To address this problem, we propose a novel graph attention network that can embed global factors into neighboring points in specific local graphs. In this network, we introduce general local graph, which integrates all points sharing same order positions with encoded central point weights. In other words, it represents the most fundamental features of total local graphs. Besides, local graphs are regenerated to embed global factors by combining general local graph and central point attention. As a result, one point can obtain additional features from corresponding ones with same order positions in different neighborhoods. Experiment on large-scale point cloud segmentation dataset proves our network's competitive performance.},
   preview      = {general.jpg},
   dimensions   = {true}
