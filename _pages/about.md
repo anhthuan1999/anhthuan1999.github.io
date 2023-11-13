@@ -2,7 +2,7 @@
 layout: about
 title: About
 permalink: /
-subtitle: <b>I am looking for PhD positions in Fall 2024, specifically in 3D reasoning and generative 3D.</b> <br> Master Student at <a href='http://ai_conv.pknu.ac.kr/eng/'>Deparment of Artificial Intelligence Convergence</a>, <a href='https://www.pknu.ac.kr/eng'>Pukyong National University</a>
+subtitle: <br> Master Student at <a href='http://ai_conv.pknu.ac.kr/eng/'>Deparment of Artificial Intelligence Convergence</a>, <a href='https://www.pknu.ac.kr/eng'>Pukyong National University</a>
 
 profile:
   align: right
