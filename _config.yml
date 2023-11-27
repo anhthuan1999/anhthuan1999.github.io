@@ -75,7 +75,7 @@ github_username: anhthuan1999 # your GitHub user name
 gitlab_username: # your GitLab user name
 twitter_username: anhthuan1999 # your Twitter handle
 mastodon_username: # your mastodon instance+username in the format instance.tld/@username
-linkedin_username: thuan-tran-anh-622370146 # your LinkedIn user name
+linkedin_username: anh-thuan-tran-622370146 # your LinkedIn user name
 telegram_username: # your Telegram user name
 scholar_userid: bIdARZMAAAAJ # your Google Scholar ID
 semanticscholar_id: # your Semantic Scholar ID
@@ -160,8 +160,7 @@ disqus_shortname: al-folio # put your disqus shortname
 # you can display them in your blog by adding a link to the RSS feed.
 external_sources:
   - name: medium.com
-    rss_url: https://medium.com/@al-folio/feed
-
+    rss_url: 
 # -----------------------------------------------------------------------------
 # Collections
 # -----------------------------------------------------------------------------
