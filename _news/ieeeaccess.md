@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-1 paper <b>Local Graph Point Attention Network in Point Cloud Segmentatio</b> is accepted at IEEE Access.
+1 paper <b>Local Graph Point Attention Network in Point Cloud Segmentation</b> is accepted at IEEE Access.
