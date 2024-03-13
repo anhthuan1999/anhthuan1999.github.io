@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-Master graduation and achieving Pukyong National University International Student Award.
+Master graduation and achieving Outstanding International Student Award (Pukyong National University).
