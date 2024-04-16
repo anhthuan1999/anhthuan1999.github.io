@@ -2,7 +2,7 @@
 layout: about
 title: About
 permalink: /
-subtitle: <br> Master Student at <a href='http://ai_conv.pknu.ac.kr/eng/'>Deparment of Artificial Intelligence Convergence</a>, <a href='https://www.pknu.ac.kr/eng'>Pukyong National University</a>
+subtitle: <br> Upcoming PhD Student at <a href='https://cs.gmu.edu/'>Deparment of Computer Science</a>, <a href='https://www.gmu.edu/'>George Mason University</a>
 
 profile:
   align: right
@@ -15,8 +15,9 @@ selected_papers: true # includes a list of papers marked as "selected={true}"
 social: true  # includes social icons at the bottom of the page
 ---
 
-Hi, I'm Thuan, a final-year Master student at <a href='http://ai_conv.pknu.ac.kr/eng/'>Deparment of Artificial Intelligence Convergence</a>, <a href='https://www.pknu.ac.kr/eng'>Pukyong National University</a> under the supervision of Professor Ki-Ryong Kwon with MCSP Lab. Before that, I graduated from <a href='http://en.uel.edu.vn/'>University of Economics and Law, VNU-HCM</a> with a Bachelor's degree in <a href='https://is.uel.edu.vn/?PageId=4f38865c-525f-45ac-847c-538340d12274/'>Ecommerce, Faculty of Information Systems</a> and be advised by Professor Hoanh-Su Le. 
+Hi, I'm Thuan. I'm an upcoming Ph.D. student in <a href='https://cs.gmu.edu/'>Department of Computer Science</a>, <a href='https://www.gmu.edu/'>George Mason University</a> under the supervision of Professor Jana Kosecka. Previously, I earned my Master's degree in <a href='http://ai_conv.pknu.ac.kr/eng/'>Deparment of Artificial Intelligence Convergence</a>, <a href='https://www.pknu.ac.kr/eng'>Pukyong National University</a> under the guidance of Professor Ki-Ryong Kwon at the MCSP Lab. I hold a Bachelor's degree in <a href='https://is.uel.edu.vn/'>Ecommerce, Faculty of Information Systems</a> at <a href='http://en.uel.edu.vn/'>University of Economics and Law, VNU-HCM</a>. My undergraduate advisor was Professor Hoanh-Su Le.
 
-<b>Research Interest</b>: artificial intelligence, weakly-supervised, point cloud processing, 3D reasoning, generative 3D, natural language processing, time-series forecasting.
+
+<b>Research Interest</b>: artificial intelligence, weakly-supervised, point cloud processing, 3D reasoning, generative 3D
 
 
