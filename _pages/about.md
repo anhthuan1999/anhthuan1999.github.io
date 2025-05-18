@@ -2,7 +2,7 @@
 layout: about
 title: About
 permalink: /
-subtitle: <br> Upcoming PhD Student at <a href='https://cs.gmu.edu/'>Deparment of Computer Science</a>, <a href='https://www.gmu.edu/'>George Mason University</a>
+subtitle: <br> PhD Student at <a href='https://cs.gmu.edu/'>Deparment of Computer Science</a>, <a href='https://www.gmu.edu/'>George Mason University</a>
 
 profile:
   align: right
