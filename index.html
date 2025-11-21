@@ -212,6 +212,122 @@
 
   <picture>
     
+    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/publication_preview/varsplat-480.webp"></source>
+    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/publication_preview/varsplat-800.webp"></source>
+    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/publication_preview/varsplat-1400.webp"></source>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/publication_preview/varsplat.jpg" class="preview z-depth-1 rounded" width="auto" height="auto" alt="varsplat.jpg" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+
+  </picture>
+
+</figure>
+</div>
+
+        <!-- Entry bib key -->
+        <div id="tran2025varsplat" class="col-sm-8">
+        <!-- Title -->
+        <div class="title">VarSplat: Uncertainty-aware 3D Gaussian Splatting for Robust RGB-D SLAM</div>
+        <!-- Author -->
+        <div class="author">
+        
+
+        \textbfAnh Thuan \textbfTran, and Jana Kosecka</div>
+
+        <!-- Journal/Book title and date -->
+        
+        
+        <div class="periodical">
+          <em>Under Review</em>, 2025
+        </div>
+        <div class="periodical">
+          
+        </div>
+
+          <!-- Links/Buttons -->
+          <div class="links">
+            <a class="abstract btn btn-sm z-depth-0" role="button">Abs</a>
+          </div>
+          
+          <div class="badges">
+            <span class="altmetric-embed" data-hide-no-mentions="true" data-hide-less-than="15" data-badge-type="2" data-badge-popover="right"></span>
+              <span class="__dimensions_badge_embed__" data-pmid="" data-hide-zero-citations="true" data-style="small_rectangle" data-legend="hover-right" style="margin-bottom: 3px;"></span>
+          </div>
+
+          <!-- Hidden abstract block -->
+          <div class="abstract hidden">
+            <p>Simultaneous Localization and Mapping (SLAM) with 3D Gaussian Splatting (3DGS) enables fast, differentiable rendering and high-fidelity reconstruction across diverse real-world scenes. However, existing 3DGS-SLAM approaches handle measurement reliability implicitly, making pose estimation and global alignment susceptible to drift in low-texture regions, transparent surfaces, or areas with complex reflectance properties. To this end, we introduce VarSplat, an uncertainty-aware 3DGS-SLAM system that explicitly learns per-splat appearance variance. By using the law of total variance with alpha compositing, we then compute corresponding differentiable per-pixel uncertainty map. This variance map guides tracking, submap registration, and loop detection toward focusing on reliable regions and contributes to more stable optimization. Experimental results on Replica (synthetic) and TUM-RGBD, ScanNet, and ScanNet++ (real-world) show that VarSplat improves robustness and achieves competitive or superior tracking, mapping, and novel view synthesis rendering compared to existing studies for dense RGB-D SLAM.</p>
+          </div>
+        </div>
+      </div>
+</li>
+<li>
+<!-- _layouts/bib.html -->
+      <div class="row">
+        <div class="col-sm-2 preview">
+<figure>
+
+  <picture>
+    
+    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/publication_preview/pointsplat-480.webp"></source>
+    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/publication_preview/pointsplat-800.webp"></source>
+    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/publication_preview/pointsplat-1400.webp"></source>
+    
+
+    <!-- Fallback to the original file -->
+    <img src="/assets/img/publication_preview/pointsplat.jpg" class="preview z-depth-1 rounded" width="auto" height="auto" alt="pointsplat.jpg" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
+
+  </picture>
+
+</figure>
+</div>
+
+        <!-- Entry bib key -->
+        <div id="tran2025pointsplat" class="col-sm-8">
+        <!-- Title -->
+        <div class="title">PointSplat: Unified Image-Agnostic Gaussian Pruning for 3D Transformer Refinement</div>
+        <!-- Author -->
+        <div class="author">
+        
+
+        \textbfAnh Thuan \textbfTran, and Jana Kosecka</div>
+
+        <!-- Journal/Book title and date -->
+        
+        
+        <div class="periodical">
+          <em>Under Review</em>, 2025
+        </div>
+        <div class="periodical">
+          
+        </div>
+
+          <!-- Links/Buttons -->
+          <div class="links">
+            <a class="abstract btn btn-sm z-depth-0" role="button">Abs</a>
+          </div>
+          
+          <div class="badges">
+            <span class="altmetric-embed" data-hide-no-mentions="true" data-hide-less-than="15" data-badge-type="2" data-badge-popover="right"></span>
+              <span class="__dimensions_badge_embed__" data-pmid="" data-hide-zero-citations="true" data-style="small_rectangle" data-legend="hover-right" style="margin-bottom: 3px;"></span>
+          </div>
+
+          <!-- Hidden abstract block -->
+          <div class="abstract hidden">
+            <p>3D Gaussian Splatting (3DGS) has recently advanced the field of novel view synthesis, enabling real-time rendering of high-fidelity images using explicit 3D Gaussian representations. However, traditional methods often require millions of Gaussians to capture complex scenes, leading to significant memory and storage demands. Recent approaches have addressed this issue through pruning and per-scene fine-tuning of Gaussian parameters, there by reducing the number of Gaussians while maintaing visual quality. These strategies typically rely on 2D images to compute important scores followed by scene-specific optimization. In this work, we introduce PointSplat, 3D unified prune-and-refine framework that bridges previously disjoint directions of image-driven pruning and transformer refinement. Our method includes two key components: (1) an intrinsic pruning strategy that ranks Gaussians based solely on their 3D attributes, removing reliance on 2D images; and (2) a balanced dual-branch encoder that explicitly separates and re-weights geometric and appearance features to avoid feature dominance. Extensive experiments on ScanNet++ and Replica across varying sparsity levels demonstrate that PointSplat consistently achieves competitive rendering quality and improved efficiency without additional per-scene optimization.</p>
+          </div>
+        </div>
+      </div>
+</li>
+<li>
+<!-- _layouts/bib.html -->
+      <div class="row">
+        <div class="col-sm-2 preview">
+<figure>
+
+  <picture>
+    
     <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/publication_preview/pointct-480.webp"></source>
     <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/publication_preview/pointct-800.webp"></source>
     <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/publication_preview/pointct-1400.webp"></source>
@@ -272,151 +388,6 @@
           <!-- Hidden abstract block -->
           <div class="abstract hidden">
             <p>Although point cloud segmentation has a principal role in 3D understanding, annotating fully large-scale scenes for this task can be costly and time-consuming. To resolve this issue, we propose Point Central Transformer (PointCT), a novel end-to-end trainable transformer network for weaklysupervised point cloud semantic segmentation. Divergent from prior approaches, our method addresses limited point annotation challenges exclusively based on 3D points through central-based attention. By employing two embedding processes, our attention mechanism integrates global features across neighborhoods, thereby effectively enhancing unlabeled point representations. Simultaneously, the interconnections between central points and their distinct neighborhoods are bidirectional cohered. Position encoding is further applied to enforce geometric features and improve overall performance. Notably, PointCT achieves outstanding performance under various labeled point settings without additional supervision. Extensive experiments on public datasets S3DIS, ScanNet-V2, and STPLS3D demonstrate the superiority of our proposed approach over other state-of-the-art methods.</p>
-          </div>
-        </div>
-      </div>
-</li>
-<li>
-<!-- _layouts/bib.html -->
-      <div class="row">
-        <div class="col-sm-2 preview">
-<figure>
-
-  <picture>
-    
-    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/publication_preview/lgpa-480.webp"></source>
-    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/publication_preview/lgpa-800.webp"></source>
-    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/publication_preview/lgpa-1400.webp"></source>
-    
-
-    <!-- Fallback to the original file -->
-    <img src="/assets/img/publication_preview/lgpa.jpg" class="preview z-depth-1 rounded" width="auto" height="auto" alt="lgpa.jpg" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
-
-  </picture>
-
-</figure>
-</div>
-
-        <!-- Entry bib key -->
-        <div id="lgpaaccess2023" class="col-sm-8">
-        <!-- Title -->
-        <div class="title">Local Graph Point Attention Network in Point Cloud Segmentation</div>
-        <!-- Author -->
-        <div class="author">
-        
-
-        Anh-Thuan Tran, Hoanh-Su Le, Suk-Hwan Lee, and
-          <span class="more-authors" title="click to view 1 more author" onclick="
-                var element = $(this);
-                element.attr('title', '');
-                var more_authors_text = element.text() == '1 more author' ? 'Ki-Ryong Kwon' : '1 more author';
-                var cursorPosition = 0;
-                var textAdder = setInterval(function(){
-                  element.text(more_authors_text.substring(0, cursorPosition + 1));
-                  if (++cursorPosition == more_authors_text.length){
-                    clearInterval(textAdder);
-                  }
-              }, '10');
-              ">1 more author</span>
-</div>
-
-        <!-- Journal/Book title and date -->
-        
-        
-        <div class="periodical">
-          <em>IEEE Access</em>, 2023
-        </div>
-        <div class="periodical">
-          
-        </div>
-
-          <!-- Links/Buttons -->
-          <div class="links">
-            <a class="abstract btn btn-sm z-depth-0" role="button">Abs</a>
-            <a href="https://doi.org/10.1109/ACCESS.2023.3263852" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">HTML</a>
-          </div>
-          
-          <div class="badges">
-            <span class="altmetric-embed" data-hide-no-mentions="true" data-hide-less-than="15" data-badge-type="2" data-badge-popover="right" data-doi="10.1109/ACCESS.2023.3263852"></span>
-              <span class="__dimensions_badge_embed__" data-doi="10.1109/ACCESS.2023.3263852" data-hide-zero-citations="true" data-style="small_rectangle" data-legend="hover-right" style="margin-bottom: 3px;"></span>
-          </div>
-
-          <!-- Hidden abstract block -->
-          <div class="abstract hidden">
-            <p>Exploiting global factors and embedding them directly into local graphs in point clouds are challenging due to dense points and irregular structure. To accomplish this goal, we propose a novel end-to-end trainable graph attention network that extracts global features in terms of local graphs. Our network presents general local graph, which obtains the most fundamental features based on point order positions in different neighborhoods. Central point attention is introduced to share weights with neighboring points to reinforce central point impacts. As a result, one point in the specific local graph can obtain global features from corresponding ones in other neighborhoods but still focus on its area by encoded central point weight sharing. Experimental results on benchmark point cloud segmentation datasets demonstrate our proposed network’s competitive performance.</p>
-          </div>
-        </div>
-      </div>
-</li>
-<li>
-<!-- _layouts/bib.html -->
-      <div class="row">
-        <div class="col-sm-2 preview">
-<figure>
-
-  <picture>
-    
-    <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/publication_preview/general-480.webp"></source>
-    <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/publication_preview/general-800.webp"></source>
-    <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/publication_preview/general-1400.webp"></source>
-    
-
-    <!-- Fallback to the original file -->
-    <img src="/assets/img/publication_preview/general.jpg" class="preview z-depth-1 rounded" width="auto" height="auto" alt="general.jpg" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
-
-  </picture>
-
-</figure>
-</div>
-
-        <!-- Entry bib key -->
-        <div id="generallocalicce2023" class="col-sm-8">
-        <!-- Title -->
-        <div class="title">General Local Graph Attention in Large-scale Point Cloud Segmentation</div>
-        <!-- Author -->
-        <div class="author">
-        
-
-        Anh-Thuan Tran, Hoanh-Su Le, Oh-Joon Kwon, and
-          <span class="more-authors" title="click to view 2 more authors" onclick="
-                var element = $(this);
-                element.attr('title', '');
-                var more_authors_text = element.text() == '2 more authors' ? 'Suk-Hwan Lee, Ki-Ryong Kwon' : '2 more authors';
-                var cursorPosition = 0;
-                var textAdder = setInterval(function(){
-                  element.text(more_authors_text.substring(0, cursorPosition + 1));
-                  if (++cursorPosition == more_authors_text.length){
-                    clearInterval(textAdder);
-                  }
-              }, '10');
-              ">2 more authors</span>
-</div>
-
-        <!-- Journal/Book title and date -->
-        
-        
-        <div class="periodical">
-          <em>In IEEE International Conference on Consumer Electronics, ICCE 2023,
-                  Las Vegas, NV, USA, January 6-8, 2023</em>, 2023
-        </div>
-        <div class="periodical">
-          
-        </div>
-
-          <!-- Links/Buttons -->
-          <div class="links">
-            <a class="abstract btn btn-sm z-depth-0" role="button">Abs</a>
-            <a href="https://doi.org/10.1109/ICCE56470.2023.10043500" class="btn btn-sm z-depth-0" role="button" rel="external nofollow noopener" target="_blank">HTML</a>
-          </div>
-          
-          <div class="badges">
-            <span class="altmetric-embed" data-hide-no-mentions="true" data-hide-less-than="15" data-badge-type="2" data-badge-popover="right" data-doi="10.1109/ICCE56470.2023.10043500"></span>
-              <span class="__dimensions_badge_embed__" data-doi="10.1109/ICCE56470.2023.10043500" data-hide-zero-citations="true" data-style="small_rectangle" data-legend="hover-right" style="margin-bottom: 3px;"></span>
-          </div>
-
-          <!-- Hidden abstract block -->
-          <div class="abstract hidden">
-            <p>Due to the massive number of points and irregular structure, there is challenging to determine local graph relationships in large-scale point clouds. To address this problem, we propose a novel graph attention network that can embed global factors into neighboring points in specific local graphs. In this network, we introduce general local graph, which integrates all points sharing same order positions with encoded central point weights. In other words, it represents the most fundamental features of total local graphs. Besides, local graphs are regenerated to embed global factors by combining general local graph and central point attention. As a result, one point can obtain additional features from corresponding ones with same order positions in different neighborhoods. Experiment on large-scale point cloud segmentation dataset proves our network’s competitive performance.</p>
           </div>
         </div>
       </div>
