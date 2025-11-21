@@ -11,17 +11,27 @@
 - title: Academic Interests
   type: nested_list
   contents:
-    - title: Point cloud processing
+    - title: 3D Gaussian Splatting
       items: 
-        - Weakly-supervised segmentation
-        - Generative and Reconstruction
-    - title: 3D reasoning
-      items:
-        - Visual reasoning using 3D point cloud and NLP
+        - 3D Gaussian Splatting
+        - 3DGS SLAM
+        - 3D Gaussian Pruning
+        - 3D Dynamic Reconstruction
         
 - title: Education
   type: time_table
   contents:
+    - title: PhD Student
+      institution: Department of Computer Science, George Mason University, Fairfax, USA
+      year: 2025 - now
+      description:
+        - "GPA: 4.0/4.0"
+        - title: Relevant coursework
+          contents:
+            - Computer Vision
+            - Machine Learning
+            - Deep Learning
+            - Computer Graphics
     - title: Master of Engineering
       institution: Deparment of Artificial Intelligence Convergence, Pukyong National University, Busan, South Korea
       year: 2022 - now
@@ -44,68 +54,85 @@
             - Data Structure and Algorithm
             - Probability Theory
             - Information System Analysis and Design
-            - Web Data Analysis 
-            - E-Commerce Security
-            - E-Commerce Strategies
-            - E-Payment
 
 - title: Experience
   type: time_table
   contents:
     - title: Graduate Research Assistant
-      institution: MCSP Lab, Pukyong National University, Busan, South Korea.
-      year: 2022 - now
+      institution: Artificial Intelligence and Database Lab, George Mason University, Fairfax, USA.
+      year: 2024 - now
       description:
-      - Working on 4D point cloud panoptic segmentation. The architecture is build upon point-based methods and previous Transformer attention mechanisms.
+      - Building uncertainty-aware 3D Gaussian Splatting for robust RGB-D SLAM.
+      - Building image-agnostic 3D Gaussian pruning for 3D Transformer refinement.
+      - Developing 3D Gaussian Splatting for dynamic scene reconstruction.
+      - Implementing 3D Gaussian Splatting with vision-language models for scene understanding.
+
+
+    - title: AI Researcher
+      institution: NewGen I&S, Busan, South Korea.
+      year: 2024 - 2024
+      description:
+      - Building AI-based chatbot for marine industry using LLM and RAG for bilingual documents.
+
+    - title: Graduate Research Assistant
+      institution: MCSP Lab, Pukyong National University, Busan, South Korea.
+      year: 2022 - 2024
+      description:
       - Proposing point-based Transformer architecture in weakly-supervised 3D point cloud segmentation. The network outperform other fully-supervised methods using only 0.1% point annotations.
 
-    - title: Data Research Analyst
-      institution: Tuan Loc Commodities, Ho Chi Minh City Vietnam.
-      year: 2021-2022
-      description:
-      - Exporting reports monthly in docx and pptx format automatically using python with data visualization and corresponding text description directly from SQL Server.
-      - Building forecasting model and backtest strategy to forecast future price in the coffee market combined with the actual stock. Manage and update master data with predefined features, Building appropriate the backtest strategy and compare with current strategies (Momentum, Mean Reverse, Pair Trading,..)
+    # - title: Data Research Analyst
+    #   institution: Tuan Loc Commodities, Ho Chi Minh City Vietnam.
+    #   year: 2021-2022
+    #   description:
+    #   - Exporting reports monthly in docx and pptx format automatically using python with data visualization and corresponding text description directly from SQL Server.
+    #   - Building forecasting model and backtest strategy to forecast future price in the coffee market combined with the actual stock. Manage and update master data with predefined features, Building appropriate the backtest strategy and compare with current strategies (Momentum, Mean Reverse, Pair Trading,..)
 
-    - title: Undergraduate Research Assistant
-      institution: GB AI Lab, Ho Chi Minh City, Vietnam.
-      year: 2020 - 2021
-      description:
-        - Building complete solutions for smart classroom applied AI specialized in computer vision including face recognition and emotion detection.
-        - Implement machine learning and deep learning model for face detection. Transfer learning by using deep learning models for emotion classification.
-        - Building clustering algorithm that suggest location for school planning and visualizing results on map.
-        - Proposing function that covers the operating cost and individual cost for changing school location and algorithm to suggest students change current school with appropriate capacity.
+    # - title: Undergraduate Research Assistant
+    #   institution: GB AI Lab, Ho Chi Minh City, Vietnam.
+    #   year: 2020 - 2021
+    #   description:
+    #     - Building complete solutions for smart classroom applied AI specialized in computer vision including face recognition and emotion detection.
+    #     - Implement machine learning and deep learning model for face detection. Transfer learning by using deep learning models for emotion classification.
+    #     - Building clustering algorithm that suggest location for school planning and visualizing results on map.
+    #     - Proposing function that covers the operating cost and individual cost for changing school location and algorithm to suggest students change current school with appropriate capacity.
 
-- title: Technical Projects
-  type: time_table
-  contents:
-    - title: Point cloud segmentation
-      year: 2022 - now
-      description:
-      - Building point-based Transformer network for segmentation tasks using limited point annotations in large-scale indoor and outdoor point clouds.
-      - Proposing Transformer architecture for panoptic segmentation in point cloud sequences.
-    - title: Algorithmic trading
-      year: 2021 - 2022
-      description: Applying machine learning model in forecasting (Prophet) and building corresponding backtesting strategies on Backtrader platform.
-    - title: AI-based Smart Classroom
-      year: 2021 - 2022
-      description: 
-      - Applying current machine learning models in smart classrooms for attendance, exam verification, and teaching evaluation tasks.
-      - Analysing model outputs and visualizing results into corresponding charts.
-    - title: Opinion mining with Vietnamese text
-      year: 2019 - 2020
-      description: 
-      - "News: Gather news, comments in the Smartphone industry in Vietnamese online newspapers and using machine learning to classify them."
-      - "Product reviews: Building the semi-supervised sentimental model to classify online reviews on an e-commerce market."
+# - title: Technical Projects
+#   type: time_table
+#   contents:
+#     - title: Point cloud segmentation
+#       year: 2022 - now
+#       description:
+#       - Building point-based Transformer network for segmentation tasks using limited point annotations in large-scale indoor and outdoor point clouds.
+#       - Proposing Transformer architecture for panoptic segmentation in point cloud sequences.
+#     - title: Algorithmic trading
+#       year: 2021 - 2022
+#       description: Applying machine learning model in forecasting (Prophet) and building corresponding backtesting strategies on Backtrader platform.
+#     - title: AI-based Smart Classroom
+#       year: 2021 - 2022
+#       description: 
+#       - Applying current machine learning models in smart classrooms for attendance, exam verification, and teaching evaluation tasks.
+#       - Analysing model outputs and visualizing results into corresponding charts.
+#     - title: Opinion mining with Vietnamese text
+#       year: 2019 - 2020
+#       description: 
+#       - "News: Gather news, comments in the Smartphone industry in Vietnamese online newspapers and using machine learning to classify them."
+#       - "Product reviews: Building the semi-supervised sentimental model to classify online reviews on an e-commerce market."
 
 - title: Honors and Awards
   type: time_table
   contents:
+    - year: 2024
+      items:
+        - Outstanding International Student Award (Pukyong National University)
     - year: 2022
-      items: 
-        - Google Data Analytics Certificate
-    - year: 2021
-      items: 
-        - IBM Data Science Certificate
+      items:
+        - Excellent achievement award in undergraduate research (UEL, VNU-HCM)
+    # - year: 2022
+    #   items: 
+    #     - Google Data Analytics Certificate
+    # - year: 2021
+    #   items: 
+    #     - IBM Data Science Certificate
 
 
 
