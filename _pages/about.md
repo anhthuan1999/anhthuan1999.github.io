@@ -20,6 +20,6 @@ social: true  # includes social icons at the bottom of the page
 
 <b>Research Interest</b>: artificial intelligence, gaussian splatting, neural rendering, 3D vision, 3dgs slam, 3D vision language, dynamic 3d reconstruction. -->
 
-Hi, I'm Thuan. I'm Ph.D. student in Department of Computer Science, George Mason University under supervision of <a href='https://cs.gmu.edu/~kosecka/'>Professor Jana Kosecka</a>. Previously, I earned my Master's degree in Deparment of Artificial Intelligence Convergence, Pukyong National University under the guidance of Professor Ki-Ryong Kwon at the MCSP Lab. I hold a Bachelor's degree in Ecommerce, Faculty of Information Systems at University of Economics and Law, VNU-HCM. My undergraduate advisor was Professor Hoanh-Su Le.
+Hi, I'm Thuan. I'm Ph.D. student in Department of Computer Science, George Mason University under supervision of <a href='https://people.cs.gmu.edu/~kosecka/'>Professor Jana Kosecka</a>. Previously, I earned my Master's degree in Deparment of Artificial Intelligence Convergence, Pukyong National University under the guidance of Professor Ki-Ryong Kwon at the MCSP Lab. I hold a Bachelor's degree in Ecommerce, Faculty of Information Systems at University of Economics and Law, VNU-HCM. My undergraduate advisor was Professor Hoanh-Su Le.
 
 <b>Research Interest</b>: artificial intelligence, gaussian splatting, neural rendering, 3D vision, 3dgs slam, 3D vision language, dynamic 3d reconstruction.
