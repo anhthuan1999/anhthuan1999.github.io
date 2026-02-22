@@ -1,7 +1,7 @@
 ---
 layout: varsplat-project
 title: VarSplat
-permalink: /varsplat
+permalink: /varsplat/
 nav: false
 
 paper_title: "VarSplat: Uncertainty-aware 3D Gaussian Splatting for Robust RGB-D SLAM"
