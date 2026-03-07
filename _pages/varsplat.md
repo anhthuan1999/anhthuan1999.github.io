@@ -66,7 +66,7 @@ regions, transparent surfaces, or areas with complex reflectance properties.
 <p>
 To this end, we introduce <strong>VarSplat</strong>, an uncertainty-aware 3DGS-SLAM system that explicitly learns
 per-splat appearance variance. By using the <em>law of total variance</em> with alpha compositing, we compute
-corresponding differentiable per-pixel uncertainty maps. This variance map guides tracking, submap registration, and
+corresponding differentiable per-pixel uncertainty map via <em>efficient, single-pass rasterization</em>. This variance map guides tracking, submap registration, and
 loop detection toward focusing on reliable regions and contributes to more stable optimization.
 </p>
 <p>
@@ -109,7 +109,7 @@ VarSplat builds upon 3D Gaussian Splatting SLAM systems and introduces three mai
 
 <div class="bibtex-block">
   <button class="copy-bibtex-btn" title="Copy BibTeX">Copy</button>
-<pre>@inproceedings{tran2025varsplat,
+<pre>@inproceedings{tran2026varsplat,
   title   = {VarSplat: Uncertainty-aware 3D Gaussian Splatting for Robust RGB-D SLAM},
   author  = {Tran, Anh Thuan and Kosecka, Jana},
   booktitle = {CVPR},
