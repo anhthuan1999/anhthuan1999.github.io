@@ -19,8 +19,8 @@ affiliations:
 
 venue: "CVPR 2026"
 
-paper_url: /assets/pdf/VarSplat_Preprint.pdf
-# arxiv_url: https://arxiv.org/abs/xxxx.xxxxx
+# paper_url: /assets/pdf/VarSplat_Preprint.pdf
+arxiv_url: https://arxiv.org/abs/2603.07982
 code_url: https://github.com/anhthuan1999/varsplat
 # video_url:
 # poster_url:
