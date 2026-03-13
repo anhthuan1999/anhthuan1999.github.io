@@ -24,7 +24,7 @@ arxiv_url: https://arxiv.org/abs/2603.09673
 code_url: https://github.com/anhthuan1999/varsplat
 # video_url:
 # poster_url:
-
+checkpoint_url: https://drive.google.com/drive/folders/1CaPlNdTewEkZCk0nHnmV5LhBx_XzwebX?usp=drive_link
 ---
 
 ## Visualization (ScanNet scene0169_00)

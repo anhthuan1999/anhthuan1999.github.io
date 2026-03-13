@@ -73,7 +73,7 @@
           {% endif %}
           {% if page.code_url %}
           <a href="{{ page.code_url }}" class="btn project-btn" target="_blank">
-            <i class="fab fa-github"></i>&nbsp;Code (Coming soon)
+            <i class="fab fa-github"></i>&nbsp;Code
           </a>
           {% endif %}
           {% if page.video_url %}
@@ -84,6 +84,11 @@
           {% if page.poster_url %}
           <a href="{{ page.poster_url }}" class="btn project-btn" target="_blank">
             <i class="fas fa-image"></i>&nbsp;Poster
+          </a>
+          {% endif %}
+          {% if page.checkpoint_url %}
+          <a href="{{ page.checkpoint_url }}" class="btn project-btn" target="_blank">
+            <i class="fas fa-database"></i>&nbsp;Checkpoint
           </a>
           {% endif %}
         </div>
