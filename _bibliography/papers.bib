@@ -12,15 +12,16 @@
   abstract     = {Simultaneous Localization and Mapping (SLAM) with 3D Gaussian Splatting (3DGS) enables fast, differentiable rendering and high-fidelity reconstruction across diverse real-world scenes. However, existing 3DGS-SLAM approaches handle measurement reliability implicitly, making pose estimation and global alignment susceptible to drift in low-texture regions, transparent surfaces, or areas with complex reflectance properties. To this end, we introduce VarSplat, an uncertainty-aware 3DGS-SLAM system that explicitly learns per-splat appearance variance. By using the law of total variance with alpha compositing, we then render differentiable per-pixel uncertainty map via efficient, single-pass rasterization. This map guides tracking, submap registration, and loop detection toward focusing on reliable regions and contributes to more stable optimization. Experimental results on Replica (synthetic) and TUM-RGBD, ScanNet, and ScanNet++ (real-world) show that VarSplat improves robustness and achieves competitive or superior tracking, mapping, and novel view synthesis rendering compared to existing studies for dense RGB-D SLAM.}
 }
 
-@article{tran2025pointsplat,
-  title={{PointSplat: Unified Image-Agnostic Gaussian Pruning for 3D Transformer Refinement}},
+@inproceedings{tran2025pointsplat,
+  title={{PointSplat: Efficient Geometry-Driven Pruning and Transformer Refinement for 3D Gaussian Splatting}},
   author={Tran, Anh Thuan and Kosecka, Jana},
-  journal={Under Review},
-  year={2025},
+  booktitle={CVPRW},
+  year={2026},
   selected= true,
   preview      = {pointsplat.jpg},
-  abstract     = {3D Gaussian Splatting (3DGS) has recently advanced the field of novel view synthesis, enabling real-time rendering of high-fidelity images using explicit 3D Gaussian representations. However, traditional methods often require millions of Gaussians to capture complex scenes, leading to significant memory and storage demands. Recent approaches have addressed this issue through pruning and per-scene fine-tuning of Gaussian parameters, there by reducing the number of Gaussians while maintaing visual quality. These strategies typically rely on 2D images to compute important scores followed by scene-specific optimization. In this work, we introduce PointSplat, 3D unified prune-and-refine framework that bridges previously disjoint directions of image-driven pruning and transformer refinement. Our method includes two key components: (1) an intrinsic pruning strategy that ranks Gaussians based solely on their 3D attributes, removing reliance on 2D images; and (2) a balanced dual-branch encoder that explicitly separates and re-weights geometric and appearance features to avoid feature dominance. Extensive experiments on ScanNet++ and Replica across varying sparsity levels demonstrate that PointSplat consistently achieves competitive rendering quality and improved efficiency without additional per-scene optimization.},
+  abstract     = {3D Gaussian Splatting (3DGS) has recently unlocked real-time, high-fidelity novel view synthesis by representing scenes using explicit 3D primitives. However, traditional methods often require millions of Gaussians to capture complex scenes, leading to significant memory and storage demands. Recent approaches have addressed this issue through pruning and per-scene fine-tuning of Gaussian parameters, thereby reducing the model size while maintaining visual quality. These strategies typically rely on 2D images to compute important scores followed by scene-specific optimization. In this work, we introduce PointSplat, 3D geometry-driven prune-and-refine framework that bridges previously disjoint directions of gaussian pruning and transformer refinement. Our method includes two key components: (1) an efficient geometry-driven strategy that ranks Gaussians based solely on their 3D attributes, removing reliance on 2D images during pruning stage, and (2) a dual-branch encoder that separates, re-weights geometric and appearance to avoid feature imbalance. Extensive experiments on ScanNet++ and Replica across varying sparsity levels demonstrate that PointSplat consistently achieves competitive rendering quality and superior efficiency without additional per-scene optimization.},
 }
+
 
 @inproceedings{thuan2024,
   abbr={Thesis},
