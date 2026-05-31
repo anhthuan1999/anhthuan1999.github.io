@@ -21,7 +21,7 @@ social: true  # includes social icons at the bottom of the page
 
 <b>Research Interest</b>: artificial intelligence, gaussian splatting, neural rendering, 3D vision, 3dgs slam, 3D vision language, dynamic 3d reconstruction. -->
 
-Hi, I'm Thuan. I'm Ph.D. student in Department of Computer Science, George Mason University under supervision of <a href='https://people.cs.gmu.edu/~kosecka/'>Professor Jana Kosecka</a>. Previously, I got Master from Pukyong National University supervised by Professor Ki-Ryong Kwon. 
-I got Bachelor from University of Economics and Law, VNU-HCM supervised by Professor Hoanh-Su Le.
+Hi, I'm Anh Thuan. PhD student in Department of Computer Science, George Mason University supervised by <a href='https://people.cs.gmu.edu/~kosecka/'>Professor Jana Kosecka</a>. Previously, I got Master from Pukyong National University, supervised by Professor Ki-Ryong Kwon. 
+I got Bachelor from University of Economics and Law, VNU-HCM, supervised by Professor Hoanh-Su Le.
 
 <b>Research Interest</b>: artificial intelligence, gaussian splatting, neural rendering, 3D vision, 3dgs slam, 3D vision language, dynamic 3d reconstruction.
