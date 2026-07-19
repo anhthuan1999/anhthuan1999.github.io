@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <!-- Metadata, OpenGraph and Schema.org -->
+    
+
+    <!-- Standard metadata -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>VarSplat | Anh Thuan  Tran</title>
+    <meta name="author" content="Anh Thuan  Tran">
+    <meta name="description" content="A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
+">
+    <meta name="keywords" content="artificial intelligence, point cloud, deep learning, transformer">
+
+
+    <!-- Bootstrap & MDB -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-DF7Zhf293AJxJNTmh5zhoYYIMs2oXitRfBjY+9L//AY=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous">
+
+    <!-- Bootstrap Table -->
+    <link defer rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.21.4/dist/bootstrap-table.min.css">
+
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" integrity="sha256-HtsXJanqjKTc8vVQjO4YMhiqFoXkfBsjBWcX91T1jr8=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.1/css/academicons.min.css" integrity="sha256-i1+4qU2G2860dGGIOJscdC30s9beBXjFfzjWLjBRsBg=" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+
+    <!-- Code Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/github.css" media="" id="highlight_theme_light">
+
+    
+
+    <!-- Styles -->
+    
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="canonical" href="http://localhost:4000/varsplat">
+
+    <!-- Dark Mode -->
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/native.css" media="none" id="highlight_theme_dark">
+
+    <script src="/assets/js/theme.js"></script>
+    <script src="/assets/js/dark_mode.js"></script>
+    
+
+  <title>VarSplat</title>
+
+  <style>
+    html,
+    html[data-theme='dark'] {
+      --global-bg-color: #ffffff;
+      --global-code-bg-color: #f5f5f5;
+      --global-text-color: #000000;
+      --global-text-color-light: #555555;
+      --global-theme-color: #6930c3;
+      --global-hover-color: #6930c3;
+      --global-divider-color: rgba(0, 0, 0, .1);
+      --global-card-bg-color: #ffffff;
+    }
+
+    body {
+      background-color: #ffffff !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- project-page.html -->
+  <div class="project-page">
+
+    <!-- Hero Section -->
+    <div class="project-hero">
+      <div class="container">
+        <h1 class="project-title">VarSplat: Uncertainty-aware 3D Gaussian Splatting for Robust RGB-D SLAM</h1>
+
+        <div class="project-authors">
+          
+          <span class="author-item">
+            <a href="https://anhthuan1999.github.io" target="_blank" rel="external nofollow noopener">
+              Anh Thuan Tran
+              </a>, 
+          </span>
+          
+          <span class="author-item">
+            <a href="https://people.cs.gmu.edu/~kosecka/" target="_blank" rel="external nofollow noopener">
+              Jana Kosecka
+              </a>
+          </span>
+          
+        </div>
+
+        
+        <div class="project-affiliations">
+          
+          <span class="affiliation-item">Department of Computer Science, George Mason University</span>
+          
+        </div>
+        
+
+        
+        <div class="project-venue">CVPR 2026</div>
+        
+
+        <!-- Link Buttons -->
+        <div class="project-links">
+          
+          <a href="/assets/pdf/VarSplat_Preprint.pdf" class="btn project-btn" target="_blank">
+            <i class="fas fa-file-pdf"></i> Paper
+          </a>
+          
+          
+          
+          <a href="https://github.com/anhthuan1999/varsplat" class="btn project-btn" target="_blank" rel="external nofollow noopener">
+            <i class="fab fa-github"></i> Code (Coming soon)
+          </a>
+          
+          
+          
+        </div>
+      </div>
+    </div>
+
+    <!-- Page Content -->
+    <div class="container project-content">
+      <h2 id="visualization-scannet-scene0169_00">Visualization (ScanNet scene0169_00)</h2>
+
+<div class="project-video">
+  <video autoplay="" muted="" loop="" playsinline="" controls="" style="width:100%;border-radius:6px;box-shadow:0 2px 12px rgba(0,0,0,0.12);">
+    <source src="/assets/video/test3_lower.mp4" type="video/mp4"></source>
+    Your browser does not support the video tag.
+  </video>
+</div>
+<p class="teaser-caption">
+    <strong>VarSplat</strong> learns per-splat appearance variance online and renders differentiable per-pixel uncertainty map alongside input frame via single-pass rasterization, while simultaneously optimizing the map and inserting new Gaussians. 
+</p>
+
+<hr>
+
+<!-- Teaser -->
+<div class="project-teaser">
+  <img src="/assets/img/varsplat_overall.jpg" alt="VarSplat teaser">
+  <p class="teaser-caption">
+    Given RGB-D inputs, each 3D Gaussian jointly learns <i>position</i>, <i>orientation</i>, <i>scale</i>, <i>color</i>, <i>opacity</i>, and <i>appearance variance</i>. During mapping, variance is optimized <i>jointly</i> with other Gaussian parameters.
+  </p>
+</div>
+
+<hr>
+
+<h2 id="abstract">Abstract</h2>
+
+<div class="project-abstract">
+<p>
+Simultaneous Localization and Mapping (SLAM) with 3D Gaussian Splatting (3DGS) enables fast, differentiable rendering
+and high-fidelity reconstruction across diverse real-world scenes. However, existing 3DGS-SLAM approaches handle
+measurement reliability implicitly, making pose estimation and global alignment susceptible to drift in low-texture
+regions, transparent surfaces, or areas with complex reflectance properties.
+</p>
+<p>
+To this end, we introduce <strong>VarSplat</strong>, an uncertainty-aware 3DGS-SLAM system that explicitly learns
+per-splat appearance variance. By using the <em>law of total variance</em> with alpha compositing, we compute
+corresponding differentiable per-pixel uncertainty maps. This variance map guides tracking, submap registration, and
+loop detection toward focusing on reliable regions and contributes to more stable optimization.
+</p>
+<p>
+Experimental results on <strong>Replica</strong> (synthetic) and <strong>TUM-RGBD</strong>, <strong>ScanNet</strong>,
+and <strong>ScanNet++</strong> (real-world) show that VarSplat improves robustness and achieves competitive or superior
+tracking, mapping, and novel view synthesis rendering compared to existing studies for dense RGB-D SLAM.
+</p>
+</div>
+
+<hr>
+
+<h2 id="method">Method</h2>
+
+<p><img src="/assets/img/varsplat_method.jpg" alt="VarSplat method" style="width:100%;max-width:900px;display:block;margin:0 auto 1rem;"></p>
+
+<p>VarSplat builds upon 3D Gaussian Splatting SLAM systems and introduces three main contributions:</p>
+
+<ul class="highlight-list">
+  <li>
+    <strong>Per-splat Appearance Variance:</strong> Each Gaussian explicitly models an appearance variance parameter
+    in addition to color and opacity, capturing regions of photometric uncertainty.
+  </li>
+  <li>
+    <strong>Differentiable Uncertainty Maps:</strong> Using the law of total variance integrated with alpha compositing,
+    VarSplat renders differentiable per-pixel uncertainty maps alongside RGB images — no separate network required and can be operated in single-pass rasterization under online setting.
+  </li>
+  <li>
+    <strong>Uncertainty-guided Optimization:</strong> The pixel-level uncertainty map is used to weight
+    during camera tracking, submap registration, and loop closure detection,
+    leading to more robust and consistent global alignment.
+  </li>
+</ul>
+
+<hr>
+
+<h2 id="bibtex">BibTeX</h2>
+
+<div class="bibtex-block">
+  <button class="copy-bibtex-btn" title="Copy BibTeX">Copy</button>
+<pre>@inproceedings{tran2025varsplat,
+  title   = {VarSplat: Uncertainty-aware 3D Gaussian Splatting for Robust RGB-D SLAM},
+  author  = {Tran, Anh Thuan and Kosecka, Jana},
+  booktitle = {CVPR},
+  year    = {2026}
+}</pre>
+</div>
+
+
+    </div>
+
+  </div>
+
+  <style>
+    /* ===== Project Page Styles ===== */
+    body {
+      padding-top: 1rem;
+    }
+
+    .project-page {
+      padding-bottom: 4rem;
+    }
+
+    .project-hero {
+      padding: 2rem 0 2.5rem;
+      text-align: center;
+      border-bottom: 1px solid var(--global-divider-color);
+      margin-bottom: 2.5rem;
+    }
+
+    .project-title {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 1rem;
+      color: var(--global-text-color);
+    }
+
+    @media (max-width: 768px) {
+      .project-title {
+        font-size: 1.5rem;
+      }
+    }
+
+    .project-authors {
+      font-size: 1.25rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .author-item a {
+      color: var(--global-theme-color);
+      text-decoration: none;
+    }
+
+    .author-item a:hover {
+      text-decoration: underline;
+    }
+
+    .project-affiliations {
+      font-size: 1.1rem;
+      color: var(--global-text-color-light);
+      margin-bottom: 0.4rem;
+    }
+
+    .project-venue {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: var(--global-text-color-light);
+      margin-bottom: 1.2rem;
+    }
+
+    .project-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-top: 1.2rem;
+    }
+
+    .project-btn {
+      color: var(--global-text-color) !important;
+      border: 1px solid var(--global-text-color) !important;
+      padding: 0.35rem 1rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+      text-decoration: none !important;
+      background: transparent;
+    }
+
+    .project-btn:hover {
+      color: var(--global-theme-color) !important;
+      border-color: var(--global-theme-color) !important;
+      text-decoration: none !important;
+    }
+
+    /* ===== Content Sections ===== */
+    .project-content h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      border-bottom: 1px solid var(--global-divider-color);
+      padding-bottom: 0.4rem;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .project-teaser {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .project-teaser img {
+      max-width: 100%;
+      border-radius: 6px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    .project-teaser .teaser-caption {
+      font-size: 0.875rem;
+      color: var(--global-text-color-light);
+      margin-top: 0.75rem;
+      text-align: center;
+    }
+
+    .project-video {
+      width: 100%;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+      margin-bottom: 1rem;
+    }
+
+    .project-video video {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .project-video iframe {
+      width: 100%;
+      height: 450px;
+      display: block;
+    }
+
+    .project-abstract p {
+      text-align: justify;
+      line-height: 1.7;
+    }
+
+    .highlight-list {
+      padding-left: 1.25rem;
+    }
+
+    .highlight-list li {
+      margin-bottom: 0.5rem;
+      line-height: 1.6;
+    }
+
+    .results-table {
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    .bibtex-block {
+      position: relative;
+    }
+
+    .bibtex-block pre {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      padding: 1rem 1.2rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      background-color: var(--global-code-bg-color);
+    }
+
+    .copy-bibtex-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      cursor: pointer;
+      border: 1px solid var(--global-text-color);
+      border-radius: 4px;
+      background: transparent;
+      color: var(--global-text-color);
+    }
+
+    .copy-bibtex-btn:hover {
+      color: var(--global-theme-color);
+      border-color: var(--global-theme-color);
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var btn = document.querySelector('.copy-bibtex-btn');
+      if (btn) {
+        btn.addEventListener('click', function () {
+          var pre = document.querySelector('.bibtex-block pre');
+          if (pre) {
+            navigator.clipboard.writeText(pre.innerText).then(function () {
+              btn.textContent = 'Copied!';
+              setTimeout(function () { btn.textContent = 'Copy'; }, 2000);
+            });
+          }
+        });
+      }
+    });
+  </script>
+
+  <!-- jQuery -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <!-- Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha256-fgLAgv7fyCGopR/gBNq2iW3ZKIdqIcyshnUULC4vex8=" crossorigin="anonymous"></script>
+
+</body>
+
+</html>
