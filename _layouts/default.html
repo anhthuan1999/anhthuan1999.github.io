@@ -3,6 +3,7 @@
 
   <!-- Head -->
   <head>
+  {% include scripts/analytics.html %}
   {%- if page.redirect -%}
     <meta http-equiv="refresh" content="3; url={{ site.baseurl }}/" />
   {%- endif -%}
@@ -56,7 +57,6 @@
     {% include scripts/misc.html %}
     {% include scripts/badges.html %}
     {% include scripts/mathjax.html %}
-    {% include scripts/analytics.html %}
     {% include scripts/progressBar.html %}
   </body>
 </html>
