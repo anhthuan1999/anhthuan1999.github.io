@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Academic Lineage
+title: Academic Tree
 description: Tracing my academic family tree back to 19th-century Königsberg and Leipzig
 permalink: /lineage/
 nav: true
