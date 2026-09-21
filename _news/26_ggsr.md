@@ -6,7 +6,7 @@ related_posts: false
 ---
 
 <!-- I will join Google as Student Researcher in Fall 2026, hosted by Dr. Luca Ballan and Dr. Binbin Xu. I will continue working on reliability in large-scale feed-forward SLAM systems. -->
-Selected for Google Student Researcher, Fall 2026. Unfortunately, I was unable to participate.
+Selected for Google Student Researcher, Fall 2026. Unfortunately, I was unable to join the program.
 
 <!-- The internship was later unable to proceed due to changes in CPT authorization.
 
