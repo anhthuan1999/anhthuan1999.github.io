@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Camera Geometry Lab</title>
+  <meta name="description" content="Interactive pinhole camera: intrinsics K, extrinsics R and t, frustum and projection.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <header class="top">
+    <div>
+      <h1>Camera Geometry Lab</h1>
+      <nav class="pages"><a href="./" class="active">1 · Pinhole</a><a href="epipolar/">2 · Two views</a><a href="three-view/">3 · Three views</a></nav>
+      <p class="sub">Pinhole camera · <span class="mono" data-tip="P">x ~ K [R | t] X</span> · drag the sliders, orbit the 3D view, hover any symbol</p>
+    </div>
+    <div class="top-right">
+      <nav class="tabs">
+        <button data-tab="lab" class="active">Lab</button>
+        <button data-tab="info">Info</button>
+      </nav>
+      <a class="home" href="/">← anhthuan1999.github.io</a>
+    </div>
+  </header>
+
+  <main class="app" id="tab-lab">
+    <section class="left">
+      <div class="view3d" id="view3d">
+        <div class="legend">
+          <span data-tip="frustum"><i class="sw" style="background:#f5c542"></i>frustum</span>
+          <span data-tip="imagePlane"><i class="sw" style="background:#f5c54266;border:1px solid #f5c542"></i>image plane</span>
+          <span data-tip="rays"><i class="sw axes" style="background:linear-gradient(90deg,#ff7a7a,#ffd36b,#7dff9c,#7ab8ff,#d77aff)"></i>rays X → C</span>
+          <span data-tip="camAxes"><i class="sw axes"></i>camera axes</span>
+          <span data-tip="C"><i class="sw dot" style="background:#f5c542"></i>center C</span>
+          <span data-tip="worldAxes"><i class="sw axes"></i>world axes</span>
+        </div>
+        <div class="hint">left-drag: orbit · right-drag: pan · scroll: zoom</div>
+      </div>
+
+      <div class="card controls">
+        <div class="anim-row">
+          <span class="label">Animate</span>
+          <button data-anim="orbit" data-tip="animOrbit">Orbit camera</button>
+          <button data-anim="zoom" data-tip="animZoom">Zoom (f)</button>
+          <button data-anim="dolly" data-tip="animDolly">Dolly zoom</button>
+          <button data-anim="principal" data-tip="animPrincipal">Shift (c<sub>x</sub>, c<sub>y</sub>)</button>
+          <button id="reset" class="ghost">Reset</button>
+        </div>
+        <div class="groups" id="sliders"></div>
+        <div class="toggles">
+          <label data-tip="lockF"><input type="checkbox" data-toggle="lockF" checked> lock f<sub>x</sub> = f<sub>y</sub></label>
+          <label data-tip="rays"><input type="checkbox" data-toggle="rays" checked> rays</label>
+          <label data-tip="photons"><input type="checkbox" data-toggle="photons" checked> photons</label>
+          <label data-tip="imagePlane"><input type="checkbox" data-toggle="plane" checked> image plane</label>
+          <label data-tip="farFrustum"><input type="checkbox" data-toggle="far" checked> far frustum</label>
+        </div>
+      </div>
+    </section>
+
+    <aside class="right">
+      <div class="card">
+        <h3><span data-tip="image">Image</span> <span class="dim">640 × 480 px</span></h3>
+        <canvas id="img"></canvas>
+        <div id="hoverInfo" class="hover-info"></div>
+      </div>
+      <div class="card">
+        <h3>Matrices</h3>
+        <div id="matrices"></div>
+        <p class="note"><span data-tip="opencv">OpenCV convention</span>: camera x → right, y → down, z → forward.
+          <span class="mono" data-tip="Xc">X<sub>c</sub> = R X<sub>w</sub> + t</span>,
+          <span class="mono" data-tip="u">u = f<sub>x</sub> X<sub>c</sub>/Z<sub>c</sub> + c<sub>x</sub></span>,
+          <span class="mono" data-tip="v">v = f<sub>y</sub> Y<sub>c</sub>/Z<sub>c</sub> + c<sub>y</sub></span>.</p>
+      </div>
+    </aside>
+  </main>
+
+  <article class="info" id="tab-info" hidden>
+    <section>
+      <h2>What is this?</h2>
+      <p>An interactive playground for the <b>pinhole camera model</b> — the basic building block of
+        multi-view geometry, SfM, SLAM and neural rendering (NeRF, Gaussian Splatting). Every slider
+        changes one number of the camera; the 3D view shows the camera in the world, and the image
+        panel shows what that camera sees. Hover any symbol in the Lab to get a short explanation.</p>
+    </section>
+
+    <section>
+      <h2>1. From a 3D point to a pixel</h2>
+      <p>A world point <span class="mono">X<sub>w</sub></span> becomes a pixel in three steps:</p>
+      <div class="eq">
+        <div><span class="step">① world → camera</span><span class="mono">X<sub>c</sub> = R X<sub>w</sub> + t</span></div>
+        <div><span class="step">② perspective divide</span><span class="mono">x = X<sub>c</sub>/Z<sub>c</sub>,  y = Y<sub>c</sub>/Z<sub>c</sub></span></div>
+        <div><span class="step">③ normalized → pixels</span><span class="mono">u = f<sub>x</sub>·x + c<sub>x</sub>,  v = f<sub>y</sub>·y + c<sub>y</sub></span></div>
+      </div>
+      <p>In homogeneous coordinates the whole chain is one matrix:</p>
+      <div class="eq center"><span class="mono">λ [u, v, 1]ᵀ = K [R | t] [X, Y, Z, 1]ᵀ = P X̃<sub>w</sub></span></div>
+      <p>Step ② is the only non-linear part, and it is where depth is lost: every point on the ray
+        through the camera center <span class="mono">C</span> lands on the same pixel. That is why one
+        image cannot give you 3D — you need a second view (next chapter: epipolar geometry).</p>
+    </section>
+
+    <section>
+      <h2>2. Intrinsics K — the camera itself</h2>
+      <div class="eq center"><span class="mono">K = [[f<sub>x</sub>, s, c<sub>x</sub>], [0, f<sub>y</sub>, c<sub>y</sub>], [0, 0, 1]]</span></div>
+      <ul>
+        <li><b>f<sub>x</sub>, f<sub>y</sub></b> — focal length measured in pixels
+          (<span class="mono">f<sub>x</sub> = f / pixel width</span>). They set the field of view:
+          <span class="mono">FOV<sub>x</sub> = 2·atan(W / 2f<sub>x</sub>)</span>.</li>
+        <li><b>c<sub>x</sub>, c<sub>y</sub></b> — the principal point, where the optical axis hits the sensor.
+          Usually close to the image center.</li>
+        <li><b>s</b> — skew, practically always 0 for modern sensors (fixed to 0 here).</li>
+      </ul>
+      <p>K does not depend on where the camera is. You estimate it once with calibration
+        (e.g. OpenCV <span class="mono">calibrateCamera</span> on a checkerboard).</p>
+    </section>
+
+    <section>
+      <h2>3. Extrinsics R, t — where the camera is</h2>
+      <ul>
+        <li><b>R</b> (3×3 rotation, <span class="mono">RᵀR = I, det R = 1</span>) rotates world coordinates into the
+          camera frame. Its <i>rows</i> are the camera's x, y, z axes written in world coordinates.</li>
+        <li><b>t</b> is the world origin expressed in the camera frame. <b>It is not the camera position.</b></li>
+        <li>The camera center in the world is <span class="mono">C = −Rᵀt</span>; equivalently
+          <span class="mono">t = −RC</span>. Pose has 6 degrees of freedom (3 rotation + 3 translation).</li>
+      </ul>
+      <p>Here R is parameterized by Euler angles <span class="mono">R = R<sub>z</sub>(r<sub>z</sub>) R<sub>y</sub>(r<sub>y</sub>) R<sub>x</sub>(r<sub>x</sub>)</span>.
+        Euler angles are easy to read but suffer from gimbal lock (at r<sub>y</sub> = ±90°); real systems use
+        quaternions or axis-angle (Rodrigues) vectors.</p>
+    </section>
+
+    <section>
+      <h2>4. Conventions (the #1 source of bugs)</h2>
+      <table class="conv">
+        <tr><th></th><th>x</th><th>y</th><th>z (forward)</th><th>Used by</th></tr>
+        <tr><td>OpenCV / COLMAP</td><td>right</td><td>down</td><td>+z</td><td>this lab, COLMAP, 3DGS</td></tr>
+        <tr><td>OpenGL / Blender</td><td>right</td><td>up</td><td>−z</td><td>NeRF (original), three.js</td></tr>
+      </table>
+      <p>Converting between them is a flip of the y and z axes: <span class="mono">diag(1, −1, −1)</span>.
+        Also check whether a file stores world-to-camera <span class="mono">[R | t]</span> (COLMAP) or
+        camera-to-world <span class="mono">[Rᵀ | C]</span> (NeRF <span class="mono">transforms.json</span>).</p>
+    </section>
+
+    <section>
+      <h2>5. Things to try</h2>
+      <ul>
+        <li>Increase <b>f<sub>x</sub></b> only (unlock f<sub>x</sub> = f<sub>y</sub>): the image stretches horizontally — non-square pixels.</li>
+        <li>Run <b>Zoom</b> then <b>Dolly zoom</b>. Zoom changes the house size but not the
+          perspective; dolly zoom keeps the house size but changes the perspective (the background moves relative to the house).</li>
+        <li>Run <b>Shift (c<sub>x</sub>, c<sub>y</sub>)</b> and watch the frustum in 3D become skewed (off-axis) while the camera does not move.</li>
+        <li>Move <b>t<sub>z</sub></b> until a point goes behind the camera — it disappears from the image (Z<sub>c</sub> ≤ 0).</li>
+        <li>Hover a point and check the numbers in the formula against the matrices.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Roadmap</h2>
+      <ol>
+        <li><b>Pinhole camera</b> — K, R, t, frustum, projection <span class="badge">this page</span></li>
+        <li><a href="epipolar/">Two views</a> — essential &amp; fundamental matrix, epipolar lines, epipoles</li>
+        <li><a href="three-view/">Three views</a> — triangulation, noise and baseline, epipolar transfer</li>
+        <li>3D Gaussian Splatting — projecting 3D Gaussians to 2D splats</li>
+      </ol>
+    </section>
+  </article>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
