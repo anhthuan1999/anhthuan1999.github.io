@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Splat Rendering</title>
+  <meta name="description" content="Interactive explainer: sorting and alpha-blending Gaussian splats, tiles and per-pixel compositing in 3D Gaussian Splatting.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../shared/style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <header class="top">
+    <div>
+      <h1>Gaussian Splatting Explainer</h1>
+      <nav class="pages"><a href="../">1 · One Gaussian</a><a href="./" class="active">2 · Rendering</a><a href="../../geometry/" class="prereq">prerequisite: Multi-view Geometry ↗</a></nav>
+      <p class="sub">Sort, then blend front to back · <span class="mono" data-tip="blend">C = Σ cᵢ αᵢ Tᵢ</span> · hover a pixel to see which Gaussians make it</p>
+    </div>
+    <div class="top-right">
+      <nav class="tabs">
+        <button data-tab="lab" class="active">Explore</button>
+        <button data-tab="info">Info</button>
+      </nav>
+      <a class="home" href="/">← anhthuan1999.github.io</a>
+    </div>
+  </header>
+
+  <main class="app" id="tab-lab">
+    <section class="left">
+      <div class="view3d" id="view3d">
+        <div class="legend">
+          <span data-tip="ellipsoids"><i class="sw dot" style="background:#57b35f"></i>Gaussians (1σ)</span>
+          <span data-tip="camera"><i class="sw" style="background:#f5c542"></i>camera + rendered image</span>
+          <span data-tip="pixelRay"><i class="sw" style="background:#ffffff"></i>ray of the hovered pixel</span>
+        </div>
+        <div class="hint">left-drag: orbit · right-drag: pan · scroll: zoom</div>
+      </div>
+
+      <div class="card controls">
+        <div class="anim-row">
+          <span class="label">Animate</span>
+          <button data-anim="orbit" data-tip="animOrbit">Orbit camera</button>
+          <button data-anim="build" data-tip="animBuild">Build up front to back</button>
+          <button id="reset" class="ghost">Reset</button>
+        </div>
+        <div class="groups" id="sliders"></div>
+        <div class="toggles">
+          <label data-tip="sort"><input type="checkbox" data-toggle="sort" checked> sort by depth</label>
+          <label data-tip="early"><input type="checkbox" data-toggle="early" checked> early termination</label>
+          <label data-tip="outlines"><input type="checkbox" data-toggle="outlines"> splat outlines</label>
+          <label data-tip="heat"><input type="checkbox" data-toggle="heat"> splats per tile</label>
+          <label data-tip="imagePlane"><input type="checkbox" data-toggle="plane" checked> image plane</label>
+        </div>
+      </div>
+    </section>
+
+    <aside class="right">
+      <div class="card">
+        <h3><span data-tip="image">Rendered image</span> <span class="dim">hover a pixel</span></h3>
+        <canvas id="img"></canvas>
+        <div id="stats" class="readout" style="margin-top:8px"></div>
+      </div>
+      <div class="card">
+        <h3><span data-tip="breakdown">Pixel breakdown</span> <span class="dim">front to back</span></h3>
+        <div id="pixel"></div>
+      </div>
+    </aside>
+  </main>
+
+  <article class="info" id="tab-info" hidden>
+    <section>
+      <h2>From splats to an image</h2>
+      <p>Chapter 1 turned one 3D Gaussian into a 2D splat with center <span class="mono">μ'ᵢ</span>, covariance <span class="mono">Σ'ᵢ</span>,
+        opacity <span class="mono">oᵢ</span> and color <span class="mono">cᵢ</span>. A scene has millions of them. To color a pixel,
+        3DGS takes all splats that overlap it, <b>sorted by depth</b>, and blends them <b>front to back</b>:</p>
+      <div class="eq">
+        <div><span class="step">opacity at the pixel</span><span class="mono">αᵢ = oᵢ · exp(−½ dᵢᵀ Σ'ᵢ⁻¹ dᵢ)</span></div>
+        <div><span class="step">transmittance</span><span class="mono">Tᵢ = Π<sub>j&lt;i</sub> (1 − αⱼ)   (light that still gets through)</span></div>
+        <div><span class="step">color</span><span class="mono">C = Σᵢ cᵢ αᵢ Tᵢ  +  T<sub>N</sub> · background</span></div>
+      </div>
+      <p>This is the same volume-rendering equation NeRF uses, but evaluated on a handful of explicit primitives instead of
+        hundreds of samples along a ray — which is why 3DGS renders at 100+ FPS.</p>
+    </section>
+
+    <section>
+      <h2>1. Sorting</h2>
+      <p>The formula is only correct if splats are in front-to-back order. 3DGS sorts once per frame by the depth of each
+        Gaussian's center (a GPU radix sort on a key that combines tile id and depth). Turning sorting off in the Lab shows
+        what happens otherwise: the ground, listed first, is blended as if it were in front of everything. Sorting by center
+        depth is itself an approximation — two intersecting Gaussians can "pop" when their centers swap order.</p>
+    </section>
+
+    <section>
+      <h2>2. Tiles and early termination</h2>
+      <ul>
+        <li>The image is cut into 16×16 tiles. Each Gaussian is duplicated into every tile its 3σ square touches, so each tile
+          gets its own short, sorted list, and one GPU thread block renders one tile.</li>
+        <li>A pixel stops as soon as its transmittance drops below 10⁻⁴: nothing behind can change it visibly. Opaque
+          foreground saves a lot of work.</li>
+        <li>The heat map shows how many splats each tile has to process. Large splats (scale modifier) cost more.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>3. Why it is differentiable</h2>
+      <p>Every step — projection, α, transmittance, the sum — is a smooth function of μ, Σ, o and c (except the sort order,
+        which is treated as constant). So the rendered image can be compared to a photo and the error back-propagated to every
+        Gaussian. That optimization is the next chapter.</p>
+    </section>
+
+    <section>
+      <h2>4. Things to try</h2>
+      <ul>
+        <li>Hover the purple glass panel: you see it and what is behind it, each weighted by αT.</li>
+        <li>Turn off <b>sort by depth</b> and orbit the camera.</li>
+        <li>Run <b>Build up</b>: splats are added in depth order, nearest first.</li>
+        <li>Lower the <b>scale modifier</b> to see the individual Gaussians, raise it to see them merge.</li>
+      </ul>
+    </section>
+  </article>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>

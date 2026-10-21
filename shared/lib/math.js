@@ -144,10 +144,12 @@ export function symEig(A) {
   const n = A.length;
   const a = A.map((r) => r.slice());
   const V = a.map((_, i) => a.map((__, j) => (i === j ? 1 : 0)));
+  let total = 0;
+  for (const r of a) for (const x of r) total += x * x;
   for (let sweep = 0; sweep < 60; sweep++) {
     let off = 0;
     for (let p = 0; p < n; p++) for (let q = p + 1; q < n; q++) off += a[p][q] ** 2;
-    if (off < 1e-24) break;
+    if (off <= 1e-30 * total) break;
     for (let p = 0; p < n; p++) {
       for (let q = p + 1; q < n; q++) {
         if (Math.abs(a[p][q]) < 1e-300) continue;
@@ -195,6 +197,128 @@ export function triangulateDLT(cams, uvs) {
 }
 
 export const triangulate = (cams, uvs) => triangulateDLT(cams, uvs).X;
+
+// ---------------------------------------------------------------------------
+// Estimating F: normalized 8-point algorithm
+// ---------------------------------------------------------------------------
+// Hartley normalization: centroid to the origin, mean distance √2
+export function hartley(pts) {
+  const m = [0, 0];
+  pts.forEach((p) => { m[0] += p[0] / pts.length; m[1] += p[1] / pts.length; });
+  const meanDist = pts.reduce((acc, p) => acc + Math.hypot(p[0] - m[0], p[1] - m[1]), 0) / pts.length;
+  const s = Math.SQRT2 / (meanDist || 1);
+  return [s, 0, -s * m[0], 0, s, -s * m[1], 0, 0, 1];
+}
+
+// Unit eigenvector of AᵀA (3x3 A) with the smallest eigenvalue: the right null vector of A
+export function nullVector3(A) {
+  const AtA = [0, 1, 2].map((i) => [0, 1, 2].map((j) => A[i] * A[j] + A[3 + i] * A[3 + j] + A[6 + i] * A[6 + j]));
+  const { values, vectors } = symEig(AtA);
+  let k = 0;
+  values.forEach((v, i) => { if (v < values[k]) k = i; });
+  return vectors.map((r) => r[k]);
+}
+
+// Closest rank-2 matrix: drop the smallest singular value, F' = F (I − v vᵀ)
+export function enforceRank2(F) {
+  const v = nullVector3(F);
+  const Fv = matVec(F, v);
+  return F.map((x, i) => x - Fv[Math.floor(i / 3)] * v[i % 3]);
+}
+
+// x2ᵀ F x1 = 0 from n ≥ 8 matches. Returns F (unit norm), the eigenvalues of AᵀA and the normalizing transforms.
+export function eightPoint(x1s, x2s, normalized = true) {
+  const I = [1, 0, 0, 0, 1, 0, 0, 0, 1];
+  const T1 = normalized ? hartley(x1s) : I;
+  const T2 = normalized ? hartley(x2s) : I;
+  const rows = x1s.map((p, i) => {
+    const a = matVec(T1, [p[0], p[1], 1]);
+    const b = matVec(T2, [x2s[i][0], x2s[i][1], 1]);
+    return [b[0] * a[0], b[0] * a[1], b[0], b[1] * a[0], b[1] * a[1], b[1], a[0], a[1], 1];
+  });
+  const AtA = [...Array(9)].map((_, i) => [...Array(9)].map((__, j) => rows.reduce((acc, r) => acc + r[i] * r[j], 0)));
+  const { values, vectors } = symEig(AtA);
+  let k = 0;
+  values.forEach((v, i) => { if (v < values[k]) k = i; });
+  const Fhat = enforceRank2(vectors.map((r) => r[k]));
+  const F = frobNormalize(matMul(matMul(transpose(T2), Fhat), T1));
+  return { F, values: values.slice().sort((a, b) => a - b), T1, T2 };
+}
+
+// Symmetric epipolar distance (pixels): mean distance of each point to the other's epipolar line
+export function epiDist(F, x1, x2) {
+  const l2 = matVec(F, [x1[0], x1[1], 1]);
+  const l1 = matTVec(F, [x2[0], x2[1], 1]);
+  const d2 = Math.abs(l2[0] * x2[0] + l2[1] * x2[1] + l2[2]) / Math.hypot(l2[0], l2[1]);
+  const d1 = Math.abs(l1[0] * x1[0] + l1[1] * x1[1] + l1[2]) / Math.hypot(l1[0], l1[1]);
+  return (d1 + d2) / 2;
+}
+
+// ---------------------------------------------------------------------------
+// Bundle adjustment helpers
+// ---------------------------------------------------------------------------
+// Rotation matrix from an axis-angle vector (exponential map)
+export function rodrigues(w) {
+  const th = norm(w);
+  if (th < 1e-12) return [1, -w[2], w[1], w[2], 1, -w[0], -w[1], w[0], 1];
+  const K = skew(scale(w, 1 / th));
+  const K2 = matMul(K, K);
+  const s = Math.sin(th), c = 1 - Math.cos(th);
+  return [1, 0, 0, 0, 1, 0, 0, 0, 1].map((x, i) => x + s * K[i] + c * K2[i]);
+}
+
+// Solve A x = b (A: array of rows) by Gaussian elimination with partial pivoting
+export function solveLinear(A, b) {
+  const n = b.length;
+  const M = A.map((r, i) => [...r, b[i]]);
+  for (let col = 0; col < n; col++) {
+    let piv = col;
+    for (let r = col + 1; r < n; r++) if (Math.abs(M[r][col]) > Math.abs(M[piv][col])) piv = r;
+    [M[col], M[piv]] = [M[piv], M[col]];
+    const d = M[col][col];
+    if (Math.abs(d) < 1e-300) continue;
+    for (let r = col + 1; r < n; r++) {
+      const f = M[r][col] / d;
+      if (f === 0) continue;
+      for (let c = col; c <= n; c++) M[r][c] -= f * M[col][c];
+    }
+  }
+  const x = new Array(n).fill(0);
+  for (let r = n - 1; r >= 0; r--) {
+    if (Math.abs(M[r][r]) < 1e-300) continue;
+    let acc = M[r][n];
+    for (let c = r + 1; c < n; c++) acc -= M[r][c] * x[c];
+    x[r] = acc / M[r][r];
+  }
+  return x;
+}
+
+// Similarity (scale s, rotation R, translation t) that best maps src points onto dst (Umeyama)
+export function alignSimilarity(src, dst) {
+  const n = src.length;
+  const ms = scale(src.reduce(add, [0, 0, 0]), 1 / n);
+  const md = scale(dst.reduce(add, [0, 0, 0]), 1 / n);
+  const S = new Array(9).fill(0);
+  let varS = 0;
+  src.forEach((p, k) => {
+    const a = sub(p, ms), b = sub(dst[k], md);
+    for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) S[i * 3 + j] += b[i] * a[j] / n;
+    varS += dot(a, a) / n;
+  });
+  // SVD of S through the eigenvectors of SᵀS
+  const StS = [0, 1, 2].map((i) => [0, 1, 2].map((j) => S[i] * S[j] + S[3 + i] * S[3 + j] + S[6 + i] * S[6 + j]));
+  const { values, vectors } = symEig(StS);
+  const order = [0, 1, 2].sort((i, j) => values[j] - values[i]);
+  const V = order.map((k) => vectors.map((r) => r[k]));
+  if (dot(cross(V[0], V[1]), V[2]) < 0) V[2] = scale(V[2], -1);
+  const U = [0, 1].map((k) => normalize(matVec(S, V[k])));
+  U.push(cross(U[0], U[1]));
+  const d = [0, 1, 2].map((k) => dot(U[k], matVec(S, V[k])));
+  const R = [...Array(9)].map((_, i) => [0, 1, 2].reduce((acc, k) => acc + U[k][Math.floor(i / 3)] * V[k][i % 3], 0));
+  const s = varS > 0 ? (d[0] + d[1] + d[2]) / varS : 1;
+  const t = sub(md, scale(matVec(R, ms), s));
+  return { s, R, t, apply: (p) => add(scale(matVec(R, p), s), t) };
+}
 
 // ---------------------------------------------------------------------------
 // Random numbers (seeded, so noise can be resampled on demand)
