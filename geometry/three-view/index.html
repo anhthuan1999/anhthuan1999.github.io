@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Triangulation Lab</title>
+  <meta name="description" content="Interactive triangulation from three views: DLT, noise, baseline and epipolar point transfer.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <header class="top">
+    <div>
+      <h1>Camera Geometry Lab</h1>
+      <nav class="pages"><a href="../">1 · Pinhole</a><a href="../epipolar/">2 · Two views</a><a href="./" class="active">3 · Three views</a></nav>
+      <p class="sub">Triangulation · <span class="mono" data-tip="dlt">A X̃ = 0</span> · add pixel noise, shrink the baseline, and watch the reconstruction fall apart</p>
+    </div>
+    <div class="top-right">
+      <nav class="tabs">
+        <button data-tab="lab" class="active">Lab</button>
+        <button data-tab="info">Info</button>
+      </nav>
+      <a class="home" href="/">← anhthuan1999.github.io</a>
+    </div>
+  </header>
+
+  <main class="app multi" id="tab-lab">
+    <section class="left">
+      <div class="view3d" id="view3d">
+        <div class="legend">
+          <span data-tip="cams"><i class="sw" style="background:#f5c542"></i><i class="sw" style="background:#4fd1c5"></i><i class="sw" style="background:#f472b6"></i>cameras 1 2 3</span>
+          <span data-tip="rays"><i class="sw" style="background:#e6edf3"></i>rays through noisy pixels</span>
+          <span data-tip="Xhat"><i class="sw dot" style="background:#fff"></i>triangulated X̂</span>
+          <span data-tip="error3d"><i class="sw" style="background:#ff5c5c"></i>error X̂ − X</span>
+          <span data-tip="cloud"><i class="sw" style="background:#9aa7b8"></i>reconstruction</span>
+        </div>
+        <div class="hint">left-drag: orbit · right-drag: pan · scroll: zoom</div>
+      </div>
+    </section>
+
+    <aside class="right">
+      <div class="card">
+        <h3>Selected point</h3>
+        <div id="hoverInfo" class="hover-info"></div>
+      </div>
+      <div class="card">
+        <h3><span data-tip="dlt">DLT system</span> <span class="dim">normalized coordinates</span></h3>
+        <div id="matrices"></div>
+      </div>
+    </aside>
+
+    <section class="images" style="--n:3">
+      <div class="card">
+        <h3><i class="vdot" style="background:#f5c542"></i><span data-tip="view">View 1</span></h3>
+        <canvas id="img0"></canvas>
+      </div>
+      <div class="card">
+        <h3><i class="vdot" style="background:#4fd1c5"></i><span data-tip="view">View 2</span></h3>
+        <canvas id="img1"></canvas>
+      </div>
+      <div class="card">
+        <h3><i class="vdot" style="background:#f472b6"></i><span data-tip="view">View 3</span></h3>
+        <canvas id="img2"></canvas>
+      </div>
+    </section>
+
+    <div class="card controls">
+      <div class="presets">
+        <button id="resample" data-tip="resample">Resample noise</button>
+        <span class="label" style="margin-left:12px">Animate</span>
+        <button data-anim="baseline" data-tip="animBaseline">Shrink baseline</button>
+        <button data-anim="jitter" data-tip="animJitter">Noise jitter</button>
+        <button data-anim="orbit" data-tip="animOrbit">Orbit rig</button>
+      </div>
+      <div class="groups" id="sliders"></div>
+      <div class="toggles">
+        <label data-tip="use3"><input type="checkbox" data-toggle="use3" checked> use view 3 in triangulation</label>
+        <label data-tip="cloud"><input type="checkbox" data-toggle="cloud" checked> reconstruction</label>
+        <label data-tip="transfer"><input type="checkbox" data-toggle="lines" checked> epipolar transfer</label>
+        <label data-tip="imagePlane"><input type="checkbox" data-toggle="plane" checked> image planes</label>
+      </div>
+    </div>
+  </main>
+
+  <article class="info" id="tab-info" hidden>
+    <section>
+      <h2>The question</h2>
+      <p>Chapter 2 showed that a pixel only fixes a <b>ray</b>. With the same point seen in two or more calibrated
+        cameras we can intersect the rays and recover the 3D point: <b>triangulation</b>. It is the step that turns
+        matches into a point cloud in SfM (COLMAP) and SLAM, and how Gaussian Splatting gets its initial points.</p>
+    </section>
+
+    <section>
+      <h2>1. Rays don't meet</h2>
+      <p>With perfect pixels all rays pass through <span class="mono">X</span>. Real detections have noise of about a pixel,
+        so in 3D the rays are skew lines that miss each other. Triangulation is therefore a <i>least-squares</i> problem:
+        find the point that best agrees with all observations.</p>
+    </section>
+
+    <section>
+      <h2>2. Linear triangulation (DLT)</h2>
+      <p>Each view gives <span class="mono">x ~ P X̃</span>, i.e. <span class="mono">x × (P X̃) = 0</span>. Two of the three equations are independent:</p>
+      <div class="eq">
+        <div><span class="step">per view i</span><span class="mono">(xᵢ p₃ᵢᵀ − p₁ᵢᵀ) X̃ = 0,   (yᵢ p₃ᵢᵀ − p₂ᵢᵀ) X̃ = 0</span></div>
+        <div><span class="step">stack n views</span><span class="mono">A X̃ = 0,   A ∈ ℝ²ⁿˣ⁴</span></div>
+        <div><span class="step">solve</span><span class="mono">X̃ = eigenvector of AᵀA with the smallest eigenvalue (= last right singular vector of A)</span></div>
+      </div>
+      <p>Here <span class="mono">pₖᵢᵀ</span> is row k of <span class="mono">Pᵢ</span>. The lab uses normalized coordinates
+        (<span class="mono">P = [R | t]</span>, <span class="mono">x = K⁻¹x</span>) so that the numbers in A are well scaled. With noise-free data
+        the smallest eigenvalue is exactly 0; noise makes it positive. The <i>gold standard</i> is to then refine X by
+        minimizing reprojection error (non-linear least squares, as in bundle adjustment).</p>
+    </section>
+
+    <section>
+      <h2>3. Baseline and depth uncertainty</h2>
+      <p>When the rays are nearly parallel (small baseline compared to depth), a 1-pixel error moves their intersection a lot
+        along the viewing direction. Roughly, for two views</p>
+      <div class="eq center"><span class="mono">σ<sub>Z</sub> ≈ Z² / (f · b) · σ<sub>px</sub></span></div>
+      <p>— depth error grows with the square of distance and shrinks with baseline <span class="mono">b</span> and focal length <span class="mono">f</span>.
+        Try <b>Shrink baseline</b>: the reconstructed house stretches along the viewing direction.</p>
+    </section>
+
+    <section>
+      <h2>4. Three views: epipolar transfer</h2>
+      <p>Given matches <span class="mono">x₁</span> and <span class="mono">x₂</span>, where must the point appear in view 3?
+        On the epipolar line of <span class="mono">x₁</span> <i>and</i> on the epipolar line of <span class="mono">x₂</span>, so at their intersection:</p>
+      <div class="eq center"><span class="mono">x₃ = (F₁₃ x₁) × (F₂₃ x₂)</span></div>
+      <p>A third view therefore adds a strong check: a wrong match from views 1–2 predicts a point in view 3 where there is nothing.
+        The transfer breaks down when the 3D point lies in the <b>trifocal plane</b> (the plane through the three camera centers):
+        the two lines then coincide. The complete three-view relation, valid even there, is the <b>trifocal tensor</b>.</p>
+    </section>
+
+    <section>
+      <h2>5. Things to try</h2>
+      <ul>
+        <li>Set noise σ to 0: the rays meet, the error is 0 and the smallest eigenvalue is 0.</li>
+        <li>Raise σ to 3 px and toggle <b>use view 3</b>: averaging over three views reduces the error.</li>
+        <li>Run <b>Shrink baseline</b> and watch the reconstruction smear in depth while the reprojection errors stay small.</li>
+        <li>Hover a point and check that the two colored lines in each view cross near its observation.</li>
+      </ul>
+    </section>
+  </article>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>

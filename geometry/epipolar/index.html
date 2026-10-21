@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Two-View Geometry Lab</title>
+  <meta name="description" content="Interactive epipolar geometry: essential and fundamental matrix, epipolar lines, epipoles and the epipolar plane.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <header class="top">
+    <div>
+      <h1>Camera Geometry Lab</h1>
+      <nav class="pages"><a href="../">1 · Pinhole</a><a href="./" class="active">2 · Two views</a><a href="../three-view/">3 · Three views</a></nav>
+      <p class="sub">Epipolar geometry · <span class="mono" data-tip="constraint">x₂ᵀ F x₁ = 0</span> · hover a pixel in either image, watch where it can be in the other one</p>
+    </div>
+    <div class="top-right">
+      <nav class="tabs">
+        <button data-tab="lab" class="active">Lab</button>
+        <button data-tab="info">Info</button>
+      </nav>
+      <a class="home" href="/">← anhthuan1999.github.io</a>
+    </div>
+  </header>
+
+  <main class="app multi" id="tab-lab">
+    <section class="left">
+      <div class="view3d" id="view3d">
+        <div class="legend">
+          <span data-tip="cam1"><i class="sw" style="background:#f5c542"></i>camera 1</span>
+          <span data-tip="cam2"><i class="sw" style="background:#4fd1c5"></i>camera 2</span>
+          <span data-tip="baseline"><i class="sw" style="background:#e6edf3"></i>baseline</span>
+          <span data-tip="epipolarPlane"><i class="sw" style="background:#b18cff88;border:1px solid #b18cff"></i>epipolar plane</span>
+          <span data-tip="sweep"><i class="sw dot" style="background:#fff"></i>point sliding on the ray</span>
+        </div>
+        <div class="hint">left-drag: orbit · right-drag: pan · scroll: zoom</div>
+      </div>
+    </section>
+
+    <aside class="right">
+      <div class="card">
+        <h3>Selected pixel</h3>
+        <div id="hoverInfo" class="hover-info"></div>
+      </div>
+      <div class="card">
+        <h3>Two-view matrices <span class="dim">view 1 → view 2</span></h3>
+        <div id="matrices"></div>
+      </div>
+    </aside>
+
+    <section class="images" style="--n:2">
+      <div class="card">
+        <h3><i class="vdot" style="background:#f5c542"></i><span data-tip="view1">View 1</span> <span class="dim">hover to pick a pixel</span></h3>
+        <canvas id="img0"></canvas>
+      </div>
+      <div class="card">
+        <h3><i class="vdot" style="background:#4fd1c5"></i><span data-tip="view2">View 2</span> <span class="dim">hover to pick a pixel</span></h3>
+        <canvas id="img1"></canvas>
+      </div>
+    </section>
+
+    <div class="card controls">
+      <div class="presets">
+        <span class="label">Setup</span>
+        <button data-preset="general" data-tip="pGeneral">General</button>
+        <button data-preset="stereo" data-tip="pStereo">Stereo (rectified)</button>
+        <button data-preset="forward" data-tip="pForward">Forward motion</button>
+        <button data-preset="wide" data-tip="pWide">Wide baseline</button>
+        <span class="label" style="margin-left:12px">Animate</span>
+        <button data-anim="orbit" data-tip="animOrbit2">Orbit camera 2</button>
+      </div>
+      <div class="groups" id="sliders"></div>
+      <div class="toggles">
+        <label data-tip="sweep"><input type="checkbox" data-toggle="sweep" checked> depth sweep</label>
+        <label data-tip="allLines"><input type="checkbox" data-toggle="allLines"> all epipolar lines</label>
+        <label data-tip="epipolarPlane"><input type="checkbox" data-toggle="planeTri" checked> epipolar plane</label>
+        <label data-tip="imagePlane"><input type="checkbox" data-toggle="plane" checked> image planes</label>
+        <label data-tip="farFrustum"><input type="checkbox" data-toggle="far"> far frustum</label>
+      </div>
+    </div>
+  </main>
+
+  <article class="info" id="tab-info" hidden>
+    <section>
+      <h2>The question</h2>
+      <p>A pixel <span class="mono">x₁</span> in view 1 tells us the 3D point lies somewhere on a <b>ray</b> from
+        camera center <span class="mono">C₁</span> — but not at which depth. Where can its match
+        <span class="mono">x₂</span> be in view 2? Not anywhere: the ray seen from camera 2 is a line. That line is the
+        <b>epipolar line</b>, and finding matches becomes a 1D search instead of a 2D one.</p>
+    </section>
+
+    <section>
+      <h2>1. The objects</h2>
+      <ul>
+        <li><b>Baseline</b> — the segment joining the two camera centers <span class="mono">C₁C₂</span>.</li>
+        <li><b>Epipoles</b> <span class="mono">e₁, e₂</span> — where the baseline pierces each image; <span class="mono">e₂</span> is the image of
+          <span class="mono">C₁</span> in view 2, and vice versa. They can lie outside the image, or at infinity.</li>
+        <li><b>Epipolar plane</b> — the plane through <span class="mono">C₁</span>, <span class="mono">C₂</span> and the 3D point <span class="mono">X</span>.
+          Every 3D point gives one; they all contain the baseline (a "book" of pages hinged on the baseline).</li>
+        <li><b>Epipolar lines</b> — each epipolar plane cuts each image in a line. All epipolar lines of one image
+          pass through its epipole.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>2. The epipolar constraint</h2>
+      <p>Let camera 2 be related to camera 1 by <span class="mono">X₂ = R X₁ + t</span>. The vectors
+        <span class="mono">X₂</span>, <span class="mono">t</span> and <span class="mono">R X₁</span> lie in the epipolar plane, so</p>
+      <div class="eq center"><span class="mono">X₂ · (t × R X₁) = 0   ⇔   x̂₂ᵀ [t]<sub>×</sub> R x̂₁ = 0</span></div>
+      <p>with normalized coordinates <span class="mono">x̂ = K⁻¹ x</span>. This gives the two matrices:</p>
+      <div class="eq">
+        <div><span class="step">Essential matrix</span><span class="mono">E = [t]<sub>×</sub> R,      x̂₂ᵀ E x̂₁ = 0</span></div>
+        <div><span class="step">Fundamental matrix</span><span class="mono">F = K₂⁻ᵀ E K₁⁻¹,   x₂ᵀ F x₁ = 0</span></div>
+        <div><span class="step">Epipolar lines</span><span class="mono">l₂ = F x₁,   l₁ = Fᵀ x₂</span></div>
+        <div><span class="step">Epipoles</span><span class="mono">F e₁ = 0,   Fᵀ e₂ = 0</span></div>
+      </div>
+      <ul>
+        <li><b>E</b> needs calibrated cameras (known K). 5 degrees of freedom: 3 rotation + 2 for the translation direction
+          — the scale of <span class="mono">t</span> cannot be recovered from images alone.</li>
+        <li><b>F</b> works directly in pixels. 7 degrees of freedom: 3×3 up to scale (8) and <span class="mono">det F = 0</span> (rank 2).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>3. Special configurations</h2>
+      <ul>
+        <li><b>Rectified stereo</b> — same orientation, baseline along camera x. Epipoles at infinity,
+          epipolar lines are horizontal rows: matching is a search along the same row (this is what stereo depth uses).</li>
+        <li><b>Forward motion</b> — camera moves along its optical axis. The epipole is the principal point
+          ("focus of expansion") and epipolar lines radiate from it.</li>
+        <li><b>Pure rotation</b> (<span class="mono">t = 0</span>) — <span class="mono">E = 0</span>: no epipolar geometry, no depth. The two images are related by a homography instead.
+          Try putting both camera centers at the same place.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>4. Things to try</h2>
+      <ul>
+        <li>Hover a house corner in view 1. Watch the white point slide along the ray in 3D and along the epipolar line in view 2. The true match sits on the line.</li>
+        <li>Turn on <b>all epipolar lines</b>: they meet at the epipoles. Then switch between the setups.</li>
+        <li>Look at the 3D view: the purple epipolar plane cuts the image plane of camera 2 exactly along the epipolar line drawn on it.</li>
+        <li>Run <b>Orbit camera 2</b> and watch the epipoles move. When the baseline becomes parallel to an image plane, that image's epipole runs off to infinity and its epipolar lines become parallel.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Next</h2>
+      <p>F (or E) is estimated from matches with the 8-point algorithm (5-point for E), inside RANSAC.
+        Once the poses are known, matched rays can be intersected — triangulation, in chapter 3.</p>
+    </section>
+  </article>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
