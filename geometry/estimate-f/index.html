@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Estimating F</title>
+  <meta name="description" content="Interactive estimation of the fundamental matrix: 8-point algorithm, Hartley normalization and RANSAC.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../shared/style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <header class="top">
+    <div>
+      <h1>Multi-view Geometry Explainer</h1>
+      <nav class="pages"><a href="../">1 · Pinhole</a><a href="../epipolar/">2 · Two views</a><a href="../three-view/">3 · Three views</a><a href="./" class="active">4 · Estimating F</a><a href="../bundle-adjustment/">5 · Bundle adjustment</a></nav>
+      <p class="sub">8-point algorithm · <span class="mono" data-tip="eightpoint">A f = 0</span> · normalization, outliers and RANSAC, on noisy matches</p>
+    </div>
+    <div class="top-right">
+      <nav class="tabs">
+        <button data-tab="lab" class="active">Explore</button>
+        <button data-tab="info">Info</button>
+      </nav>
+      <a class="home" href="/">← anhthuan1999.github.io</a>
+    </div>
+  </header>
+
+  <main class="app multi" id="tab-lab">
+    <section class="images" style="--n:2">
+      <div class="card">
+        <h3><i class="vdot" style="background:#f5c542"></i><span data-tip="view">View 1</span> <span class="dim">hover a match</span></h3>
+        <canvas id="img0"></canvas>
+      </div>
+      <div class="card">
+        <h3><i class="vdot" style="background:#4fd1c5"></i><span data-tip="view">View 2</span> <span class="dim">hover a match</span></h3>
+        <canvas id="img1"></canvas>
+      </div>
+    </section>
+
+    <section class="left">
+      <div class="card controls">
+        <div class="presets">
+          <span class="label">Method</span>
+          <button data-method="raw" data-tip="mRaw">8-point (raw pixels)</button>
+          <button data-method="norm" data-tip="mNorm">8-point (normalized)</button>
+          <button data-method="ransac" data-tip="mRansac">RANSAC + normalized 8-point</button>
+        </div>
+        <div class="presets">
+          <span class="label">RANSAC</span>
+          <button id="play" data-tip="play">▶ Run</button>
+          <button id="step" data-tip="step">Step</button>
+          <button id="finish" data-tip="finish">Finish</button>
+          <button id="restart" class="ghost" data-tip="restart">Restart</button>
+          <button id="resample" class="ghost" data-tip="resample">New data</button>
+        </div>
+        <div class="groups" id="sliders"></div>
+      </div>
+      <div class="card">
+        <h3><span data-tip="chart">RANSAC progress</span> <span class="dim">inliers per hypothesis</span></h3>
+        <canvas id="chart" class="chart"></canvas>
+      </div>
+    </section>
+
+    <aside class="right">
+      <div class="card">
+        <h3><span data-tip="errorMetric">Comparison</span> <span class="dim">error vs. the true F</span></h3>
+        <div id="results"></div>
+      </div>
+      <div class="card">
+        <h3>Details</h3>
+        <div id="matrices"></div>
+      </div>
+    </aside>
+  </main>
+
+  <article class="info" id="tab-info" hidden>
+    <section>
+      <h2>The question</h2>
+      <p>Chapter 2 computed F from known camera poses. In practice we only have images: a feature matcher (SIFT, ORB,
+        SuperPoint + LightGlue…) gives pixel correspondences <span class="mono">x₁ ↔ x₂</span>, some of them noisy and some plain wrong.
+        From those we want F, and from F (with K) the relative pose — the first step of every SfM / SLAM pipeline.</p>
+    </section>
+
+    <section>
+      <h2>1. The 8-point algorithm</h2>
+      <p>Each match gives one linear equation in the 9 entries of F:</p>
+      <div class="eq">
+        <div><span class="step">one match</span><span class="mono">x₂ᵀ F x₁ = 0  ⇔  [x₂x₁, x₂y₁, x₂, y₂x₁, y₂y₁, y₂, x₁, y₁, 1] · f = 0</span></div>
+        <div><span class="step">n matches</span><span class="mono">A f = 0,   A ∈ ℝⁿˣ⁹</span></div>
+        <div><span class="step">solve</span><span class="mono">f = singular vector of A with the smallest singular value</span></div>
+        <div><span class="step">rank 2</span><span class="mono">F = U diag(σ₁, σ₂, 0) Vᵀ</span></div>
+      </div>
+      <p>F has 9 entries up to scale, so 8 matches determine it (7 with the rank constraint: the 7-point algorithm).
+        The least-squares solution does not have rank 2 in general; zeroing the smallest singular value gives the closest
+        rank-2 matrix so that all epipolar lines meet at one epipole.</p>
+    </section>
+
+    <section>
+      <h2>2. Why normalize (Hartley, 1997)</h2>
+      <p>With raw pixels the columns of A have wildly different scales: <span class="mono">x₂x₁ ~ 10⁵</span> next to <span class="mono">1</span>.
+        AᵀA is badly conditioned and the least-squares solution weights the equations badly, so noise is amplified.
+        The fix is cheap: translate each image's points to have centroid 0 and scale them so the mean distance is √2,</p>
+      <div class="eq center"><span class="mono">x̂ = T x,   F̂ from x̂ matches,   F = T₂ᵀ F̂ T₁</span></div>
+      <p>Compare the two 8-point rows in the Lab with 0% outliers: same data, same algorithm, several times less error.</p>
+    </section>
+
+    <section>
+      <h2>3. RANSAC (Fischler &amp; Bolles, 1981)</h2>
+      <p>Least squares has no defence against outliers: one wrong match can ruin F. RANSAC repeats:</p>
+      <ol>
+        <li>pick a minimal random sample (8 matches),</li>
+        <li>fit F to it,</li>
+        <li>count the matches that agree, i.e. whose epipolar distance is below a threshold τ (the <b>inliers</b>),</li>
+      </ol>
+      <p>keeps the hypothesis with the most inliers and finally refits F on all of its inliers. To get at least one
+        outlier-free sample with probability p, with outlier ratio ε and sample size s, it needs</p>
+      <div class="eq center"><span class="mono">N = log(1 − p) / log(1 − (1 − ε)ˢ)</span></div>
+      <p>For s = 8, p = 0.99: ε = 25% → 44 iterations, ε = 50% → 1177. That is why minimal solvers matter:
+        the 5-point algorithm for E needs far fewer samples (ε = 50% → 146).</p>
+    </section>
+
+    <section>
+      <h2>4. Things to try</h2>
+      <ul>
+        <li>Set outliers to 0 and compare <b>raw</b> and <b>normalized</b> 8-point while increasing σ.</li>
+        <li>Add 10% outliers: both plain 8-point estimates break, epipolar lines tilt away from the true ones.</li>
+        <li>Run RANSAC step by step: the yellow rings are the current sample. Most samples with an outlier get few inliers.</li>
+        <li>Make τ very small (true inliers get rejected) or very large (outliers get accepted).</li>
+      </ul>
+    </section>
+  </article>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>

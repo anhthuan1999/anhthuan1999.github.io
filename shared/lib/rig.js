@@ -23,7 +23,7 @@ export const rgb = (css) => {
   return [c.r, c.g, c.b];
 };
 
-export function createViewer(container, { position, target }) {
+export function createViewer(container, { position, target, house = true }) {
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   container.prepend(renderer.domElement);
@@ -40,13 +40,15 @@ export function createViewer(container, { position, target }) {
   scene.add(new THREE.GridHelper(10, 10, 0x3a4658, 0x1c2430));
   scene.add(new THREE.AxesHelper(1.2));
 
-  const houseGeo = new THREE.BufferGeometry().setFromPoints(
-    EDGES.flatMap(([a, b]) => [new THREE.Vector3(...POINTS[a]), new THREE.Vector3(...POINTS[b])]),
-  );
-  scene.add(new THREE.LineSegments(houseGeo, new THREE.LineBasicMaterial({ color: 0xc9d4e3 })));
+  if (house) {
+    const houseGeo = new THREE.BufferGeometry().setFromPoints(
+      EDGES.flatMap(([a, b]) => [new THREE.Vector3(...POINTS[a]), new THREE.Vector3(...POINTS[b])]),
+    );
+    scene.add(new THREE.LineSegments(houseGeo, new THREE.LineBasicMaterial({ color: 0xc9d4e3 })));
+  }
 
   const sphereGeo = new THREE.SphereGeometry(1, 16, 12);
-  const pointMeshes = POINTS.map((p, i) => {
+  const pointMeshes = (house ? POINTS : []).map((p, i) => {
     const m = new THREE.Mesh(sphereGeo, new THREE.MeshBasicMaterial({ color: POINT_COLORS[i] }));
     m.position.set(...p);
     m.scale.setScalar(0.07);

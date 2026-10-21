@@ -1,11 +1,11 @@
 // Chapter 1: the pinhole camera
-import { THREE, createViewer, CameraRig, setLines } from './lib/rig.js';
+import { THREE, createViewer, CameraRig, setLines } from '../shared/lib/rig.js';
 import {
   DEG, add, sub, scale, lerp, norm, normalize, matVec,
   eulerToR, rToEuler, lookAtR, cameraFromRt, toWorld, projMatrix, Kmat,
-} from './lib/math.js';
-import { W, H, TARGET, POINTS, POINT_COLORS, MONO, drawBase, projectPoints, disc, ring } from './lib/scene.js';
-import { fmt, vec, matHTML, htmlSetter, buildSliders, initTooltips, initTabs, pickOnCanvas } from './lib/ui.js';
+} from '../shared/lib/math.js';
+import { W, H, TARGET, POINTS, POINT_COLORS, MONO, drawBase, projectPoints, disc, ring } from '../shared/lib/scene.js';
+import { fmt, vec, matHTML, htmlSetter, buildSliders, initTooltips, initTabs, pickOnCanvas } from '../shared/lib/ui.js';
 
 const PLANE_DEPTH = 1.5;         // depth at which the image plane is drawn in 3D
 const HOME_C = [3.2, 2.3, 4.6];

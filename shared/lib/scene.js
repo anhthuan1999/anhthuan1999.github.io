@@ -46,13 +46,17 @@ export function strokeSegs(ctx, cam, segs, style, width) {
   ctx.stroke();
 }
 
-// Background, ground grid and house wireframe
-export function drawBase(ctx, cam, { edgeStyle = 'rgba(220,229,240,0.9)' } = {}) {
+export function drawBackground(ctx) {
   const g = ctx.createLinearGradient(0, 0, 0, H);
   g.addColorStop(0, '#141b27');
   g.addColorStop(1, '#0b0f16');
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, W, H);
+}
+
+// Background, ground grid and house wireframe
+export function drawBase(ctx, cam, { edgeStyle = 'rgba(220,229,240,0.9)' } = {}) {
+  drawBackground(ctx);
   strokeSegs(ctx, cam, GRID_SEGS, '#2c3747', 1);
   strokeSegs(ctx, cam, EDGES.map(([a, b]) => [POINTS[a], POINTS[b]]), edgeStyle, 2);
 }

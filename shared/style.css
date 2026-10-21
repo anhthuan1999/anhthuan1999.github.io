@@ -125,7 +125,7 @@ button.ghost { background: transparent; }
   gap: 14px 22px;
 }
 .group h4 { margin: 0 0 6px; font-size: 12px; font-weight: 500; color: var(--dim); }
-.srow { display: grid; grid-template-columns: 30px minmax(0, 1fr) 58px; align-items: center; gap: 8px; height: 26px; }
+.srow { display: grid; grid-template-columns: 36px minmax(0, 1fr) 58px; align-items: center; gap: 8px; height: 26px; }
 .srow .k { font-family: "JetBrains Mono", monospace; font-size: 12.5px; }
 .srow output { font-family: "JetBrains Mono", monospace; font-size: 12px; text-align: right; color: var(--dim); }
 input[type=range] { width: 100%; accent-color: var(--accent); }
@@ -232,3 +232,21 @@ span[data-tip], .k[data-tip], h4 [data-tip] { text-decoration: underline dotted 
   .images { grid-template-columns: minmax(0, 1fr); }
 }
 .info a { color: var(--accent); }
+
+/* Charts and comparison tables */
+.chart { width: 100%; height: 150px; display: block; }
+.spy { width: 100%; max-width: 240px; aspect-ratio: 1; display: block; image-rendering: pixelated; border: 1px solid var(--line); border-radius: 4px; }
+.cmp { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.cmp th, .cmp td { text-align: left; padding: 5px 6px; border-bottom: 1px solid var(--line); }
+.cmp th { color: var(--dim); font-weight: 500; }
+.cmp td:nth-child(2) { font-family: "JetBrains Mono", monospace; }
+.cmp tr.cur td { background: #1a2230; }
+.cmp tr.cur td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+
+/* Splatting explainer */
+.pages a.prereq { border-style: dashed; }
+.cmp.px td { padding: 3px 6px; font-size: 12px; }
+.cmp.px td:not(:first-child) { font-family: "JetBrains Mono", monospace; }
+.cmp .sw { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; }
+.bar { display: inline-block; width: 60px; height: 8px; background: #1c2430; border-radius: 4px; margin-right: 6px; vertical-align: middle; overflow: hidden; }
+.bar i { display: block; height: 100%; }

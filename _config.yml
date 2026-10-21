@@ -209,6 +209,8 @@ exclude:
   - Gemfile
   - Gemfile.lock
   - vendor
+  - geometry/estimate-f        # unfinished chapters of the geometry explainer
+  - geometry/bundle-adjustment
 keep_files:
   - CNAME
   - .nojekyll
@@ -242,7 +244,7 @@ defaults:
 # -----------------------------------------------------------------------------
 
 jekyll-minifier:
-  exclude: ['robots.txt', 'geometry/*']
+  exclude: ['robots.txt', 'geometry/*', 'shared/*', 'splatting/*']
   uglifier_args:
     harmony: true
 
