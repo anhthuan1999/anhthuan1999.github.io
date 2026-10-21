@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gaussian Splatting Explainer</title>
+  <meta name="description" content="Interactive explainer: how a 3D Gaussian is parameterized and projected to a 2D splat in 3D Gaussian Splatting.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shared/style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <header class="top">
+    <div>
+      <h1>Gaussian Splatting Explainer</h1>
+      <nav class="pages"><a href="./" class="active">1 · One Gaussian</a><a href="rendering/">2 · Rendering</a><a href="../geometry/" class="prereq">prerequisite: Multi-view Geometry ↗</a></nav>
+      <p class="sub">From an ellipsoid in 3D to a splat on the screen · <span class="mono" data-tip="covProj">Σ' = J W Σ Wᵀ Jᵀ</span> · hover any symbol</p>
+    </div>
+    <div class="top-right">
+      <nav class="tabs">
+        <button data-tab="lab" class="active">Explore</button>
+        <button data-tab="info">Info</button>
+      </nav>
+      <a class="home" href="/">← anhthuan1999.github.io</a>
+    </div>
+  </header>
+
+  <main class="app" id="tab-lab">
+    <section class="left">
+      <div class="view3d" id="view3d">
+        <div class="legend">
+          <span data-tip="ellipsoid"><i class="sw dot" id="legendColor" style="background:#4fa3ff"></i>Gaussian (1σ, 2σ)</span>
+          <span data-tip="localAxes"><i class="sw axes"></i>local axes = R·S</span>
+          <span data-tip="samples"><i class="sw dot" style="background:#e6edf3"></i>random samples</span>
+          <span data-tip="camera"><i class="sw" style="background:#f5c542"></i>camera</span>
+        </div>
+        <div class="hint">left-drag: orbit · right-drag: pan · scroll: zoom</div>
+      </div>
+
+      <div class="card controls">
+        <div class="anim-row">
+          <span class="label">Animate</span>
+          <button data-anim="orbit" data-tip="animOrbit">Orbit camera</button>
+          <button data-anim="spin" data-tip="animSpin">Spin Gaussian</button>
+          <button data-anim="close" data-tip="animClose">Fly close</button>
+          <button data-anim="pan" data-tip="animPan">Pan off-axis</button>
+          <button id="reset" class="ghost">Reset</button>
+        </div>
+        <div class="groups" id="sliders"></div>
+        <div class="toggles">
+          <label data-tip="dilation"><input type="checkbox" data-toggle="dilation" checked> +0.3 px dilation</label>
+          <label data-tip="samples"><input type="checkbox" data-toggle="samples" checked> samples</label>
+          <label data-tip="sigmas"><input type="checkbox" data-toggle="sigmas" checked> 1σ 2σ 3σ ellipses</label>
+          <label data-tip="tiles"><input type="checkbox" data-toggle="tiles" checked> tiles</label>
+          <label data-tip="imagePlane"><input type="checkbox" data-toggle="plane" checked> image plane</label>
+        </div>
+      </div>
+    </section>
+
+    <aside class="right">
+      <div class="card">
+        <h3><span data-tip="image">Image</span> <span class="dim">640 × 480 px · hover a pixel</span></h3>
+        <canvas id="img"></canvas>
+        <div id="hoverInfo" class="hover-info"></div>
+      </div>
+      <div class="card">
+        <h3>From Σ to Σ'</h3>
+        <div id="matrices"></div>
+      </div>
+    </aside>
+  </main>
+
+  <article class="info" id="tab-info" hidden>
+    <section>
+      <h2>What is this?</h2>
+      <p><b>3D Gaussian Splatting</b> (Kerbl et al., SIGGRAPH 2023) represents a scene as millions of small, colored,
+        semi-transparent 3D Gaussians and renders them by "splatting" each one onto the image as a 2D Gaussian.
+        This page follows a <i>single</i> Gaussian through that projection; chapter 2 blends many of them into an image.
+        It uses the pinhole camera from the <a href="../geometry/">Multi-view Geometry Explainer</a> — K, R, t should be familiar.</p>
+    </section>
+
+    <section>
+      <h2>1. One Gaussian, four attributes</h2>
+      <ul>
+        <li><b>Position</b> <span class="mono">μ ∈ ℝ³</span> — the center.</li>
+        <li><b>Covariance</b> <span class="mono">Σ ∈ ℝ³ˣ³</span> — size and orientation of the ellipsoid.</li>
+        <li><b>Opacity</b> <span class="mono">o ∈ [0, 1]</span> — how much it blocks what is behind it.</li>
+        <li><b>Color</b> — in 3DGS, spherical-harmonics coefficients so the color can change with viewing direction (here: one constant color).</li>
+      </ul>
+      <p>Its density is <span class="mono">G(x) = exp(−½ (x − μ)ᵀ Σ⁻¹ (x − μ))</span>. The surfaces where G is constant are ellipsoids;
+        the 1σ ellipsoid has the scales as its half-axes.</p>
+    </section>
+
+    <section>
+      <h2>2. Why Σ = R S Sᵀ Rᵀ</h2>
+      <p>A covariance matrix must be symmetric positive semi-definite. If you let gradient descent update the 6 entries of Σ freely,
+        it quickly stops being one. 3DGS therefore stores a <b>scale</b> vector <span class="mono">s</span> (as log s) and a
+        <b>rotation</b> as a unit quaternion <span class="mono">q</span>, and builds</p>
+      <div class="eq center"><span class="mono">Σ = R(q) S Sᵀ R(q)ᵀ,   S = diag(s₁, s₂, s₃)</span></div>
+      <p>which is valid for any values. The columns of <span class="mono">R·S</span> are the ellipsoid's half-axes (the colored axes in the 3D view).</p>
+    </section>
+
+    <section>
+      <h2>3. Projecting a Gaussian</h2>
+      <p>A perspective projection of a Gaussian is <i>not</i> a Gaussian. EWA splatting (Zwicker et al., 2001) linearizes the
+        projection around the center and maps the covariance through that local affine map:</p>
+      <div class="eq">
+        <div><span class="step">center</span><span class="mono">μ<sub>c</sub> = W μ + t,   μ' = π(μ<sub>c</sub>)   (the usual pinhole projection)</span></div>
+        <div><span class="step">to camera</span><span class="mono">Σ<sub>c</sub> = W Σ Wᵀ   (W = rotation of the camera)</span></div>
+        <div><span class="step">Jacobian of π</span><span class="mono">J = [[f<sub>x</sub>/z, 0, −f<sub>x</sub>x/z²], [0, f<sub>y</sub>/z, −f<sub>y</sub>y/z²]]   at μ<sub>c</sub> = (x, y, z)</span></div>
+        <div><span class="step">2D covariance</span><span class="mono">Σ' = J Σ<sub>c</sub> Jᵀ + 0.3·I   (2×2, pixels²)</span></div>
+      </div>
+      <p>The approximation is excellent when the Gaussian is small compared to its distance, and degrades for big Gaussians close
+        to the camera or far off the optical axis. Compare the white ellipses (EWA) with the orange dashed one, computed from
+        actually projected random samples.</p>
+    </section>
+
+    <section>
+      <h2>4. From Σ' to pixels and tiles</h2>
+      <ul>
+        <li>The splat's opacity at pixel <span class="mono">p</span> is <span class="mono">α = o · exp(−½ dᵀ Σ'⁻¹ d)</span>, <span class="mono">d = p − μ'</span>.
+          3DGS stores <span class="mono">Σ'⁻¹</span> as the "conic", skips <span class="mono">α &lt; 1/255</span> and caps <span class="mono">α ≤ 0.99</span>.</li>
+        <li>The eigenvalues <span class="mono">λ₁ ≥ λ₂</span> of Σ' give the ellipse axes; the splat is cut at <span class="mono">r = ⌈3√λ₁⌉</span> pixels.</li>
+        <li>The image is split into 16×16-pixel <b>tiles</b>; each Gaussian is listed in every tile its 3σ square touches. The GPU then
+          renders each tile independently — the key to real-time speed.</li>
+        <li>The <b>0.3 px dilation</b> makes every splat at least about a pixel wide, a cheap low-pass filter against aliasing of tiny Gaussians.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>5. Things to try</h2>
+      <ul>
+        <li>Make one scale tiny: the Gaussian becomes a flat disc — 3DGS scenes are full of such "surfels".</li>
+        <li>Run <b>Fly close</b> with a large Gaussian: the orange (true) and white (EWA) ellipses separate.</li>
+        <li>Run <b>Pan off-axis</b>: the splat stretches towards the image border even though the Gaussian did not change.</li>
+        <li>Shrink all scales to the minimum and toggle the dilation.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Roadmap</h2>
+      <ol>
+        <li><b>One Gaussian</b> — parameterization and projection <span class="badge">this page</span></li>
+        <li><a href="rendering/">Rendering</a> — sorting and α-blending many splats, tiles</li>
+        <li>Optimization — fitting Gaussians to images with gradient descent, densification</li>
+        <li>Gaussian Splatting SLAM — tracking and mapping with Gaussians (towards VarSplat)</li>
+      </ol>
+    </section>
+  </article>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>

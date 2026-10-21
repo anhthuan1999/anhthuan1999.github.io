@@ -1,15 +1,15 @@
 // Chapter 2: two views and epipolar geometry
-import { THREE, createViewer, CameraRig, setLines } from '../lib/rig.js';
+import { THREE, createViewer, CameraRig, setLines } from '../../shared/lib/rig.js';
 import {
   add, sub, scale, matVec, cross, transpose, rows3, det3, frobNormalize,
   yprToR, aimYawPitch, makeCamera, toCam, toWorld, project, rayDir,
   relativePose, essential, fundamental, epipole, normalize,
-} from '../lib/math.js';
+} from '../../shared/lib/math.js';
 import {
   W, H, TARGET, POINTS, POINT_COLORS, MONO,
   drawBase, projectPoints, projectSeg, disc, ring, drawLine, drawEpipole, pointLineDist,
-} from '../lib/scene.js';
-import { fmt, vec, sci, matHTML, htmlSetter, buildSliders, initTooltips, initTabs, pickOnCanvas } from '../lib/ui.js';
+} from '../../shared/lib/scene.js';
+import { fmt, vec, sci, matHTML, htmlSetter, buildSliders, initTooltips, initTabs, pickOnCanvas } from '../../shared/lib/ui.js';
 
 const CAM_COLORS = ['#f5c542', '#4fd1c5'];
 const PLANE_COLOR = '#b18cff';

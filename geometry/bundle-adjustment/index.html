@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bundle Adjustment</title>
+  <meta name="description" content="Interactive bundle adjustment: Gauss-Newton and Levenberg-Marquardt refinement of cameras and 3D points.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../shared/style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <header class="top">
+    <div>
+      <h1>Multi-view Geometry Explainer</h1>
+      <nav class="pages"><a href="../">1 · Pinhole</a><a href="../epipolar/">2 · Two views</a><a href="../three-view/">3 · Three views</a><a href="../estimate-f/">4 · Estimating F</a><a href="./" class="active">5 · Bundle adjustment</a></nav>
+      <p class="sub">Bundle adjustment · <span class="mono" data-tip="cost">min Σ ‖π(Kᵢ, Rᵢ, tᵢ, Xⱼ) − xᵢⱼ‖²</span> · start from a bad reconstruction and let the optimizer pull it into place</p>
+    </div>
+    <div class="top-right">
+      <nav class="tabs">
+        <button data-tab="lab" class="active">Explore</button>
+        <button data-tab="info">Info</button>
+      </nav>
+      <a class="home" href="/">← anhthuan1999.github.io</a>
+    </div>
+  </header>
+
+  <main class="app multi" id="tab-lab">
+    <section class="left">
+      <div class="view3d" id="view3d">
+        <div class="legend">
+          <span data-tip="estCams"><i class="sw" style="background:#f5c542"></i><i class="sw" style="background:#4fd1c5"></i><i class="sw" style="background:#f472b6"></i><i class="sw" style="background:#7aa2ff"></i>estimated cameras</span>
+          <span data-tip="gtCams"><i class="sw" style="background:#56606e"></i>true cameras</span>
+          <span data-tip="estPts"><i class="sw dot" style="background:#fff"></i>estimated points</span>
+          <span data-tip="error3d"><i class="sw" style="background:#ff5c5c"></i>error to truth</span>
+        </div>
+        <div class="hint">left-drag: orbit · right-drag: pan · scroll: zoom</div>
+      </div>
+    </section>
+
+    <aside class="right">
+      <div class="card">
+        <h3><span data-tip="optimizer">Optimizer</span></h3>
+        <div id="status" class="readout"></div>
+        <canvas id="chart" class="chart" style="margin-top:8px"></canvas>
+      </div>
+      <div class="card">
+        <h3><span data-tip="sparsity">Sparsity of JᵀJ</span> <span class="dim">cameras | points</span></h3>
+        <div class="mrow" style="align-items:flex-start">
+          <canvas id="spy" class="spy" style="max-width:170px"></canvas>
+          <p class="note" style="flex:1;min-width:150px;margin:0">Top-left: camera block (6 per camera). Bottom-right: points, block-diagonal (3×3 each).
+            The off-diagonal blocks link a camera to the points it sees. The Schur complement exploits this to solve for cameras first.</p>
+        </div>
+      </div>
+    </aside>
+
+    <section class="images" style="--n:4">
+      <div class="card"><h3><i class="vdot" style="background:#f5c542"></i><span data-tip="view">Camera 1</span> <span class="dim" id="rms0"></span></h3><canvas id="img0"></canvas></div>
+      <div class="card"><h3><i class="vdot" style="background:#4fd1c5"></i><span data-tip="view">Camera 2</span> <span class="dim" id="rms1"></span></h3><canvas id="img1"></canvas></div>
+      <div class="card"><h3><i class="vdot" style="background:#f472b6"></i><span data-tip="view">Camera 3</span> <span class="dim" id="rms2"></span></h3><canvas id="img2"></canvas></div>
+      <div class="card"><h3><i class="vdot" style="background:#7aa2ff"></i><span data-tip="view">Camera 4</span> <span class="dim" id="rms3"></span></h3><canvas id="img3"></canvas></div>
+    </section>
+
+    <div class="card controls">
+      <div class="presets">
+        <span class="label">Method</span>
+        <button data-method="lm" data-tip="lm">Levenberg–Marquardt</button>
+        <button data-method="gn" data-tip="gn">Gauss–Newton</button>
+        <span class="label" style="margin-left:12px">Optimize</span>
+        <button id="play" data-tip="play">▶ Run</button>
+        <button id="step" data-tip="step">Step</button>
+        <button id="reset" class="ghost" data-tip="reset">Reset</button>
+        <button id="newProblem" class="ghost" data-tip="newProblem">New problem</button>
+      </div>
+      <div class="groups" id="sliders"></div>
+      <div class="toggles">
+        <label data-tip="gauge"><input type="checkbox" data-toggle="gauge" checked> fix camera 1 (gauge)</label>
+        <label data-tip="residuals"><input type="checkbox" data-toggle="residuals" checked> residual vectors</label>
+        <label data-tip="gtCams"><input type="checkbox" data-toggle="truth" checked> ground truth</label>
+      </div>
+    </div>
+  </main>
+
+  <article class="info" id="tab-info" hidden>
+    <section>
+      <h2>The question</h2>
+      <p>Chapters 2–4 built a reconstruction step by step: relative poses from F/E, points from triangulation. Each step
+        uses only part of the data, so errors pile up. <b>Bundle adjustment</b> (BA) refines <i>all</i> cameras and
+        <i>all</i> points together so that the reprojected points match the detections as well as possible. The name
+        comes from the "bundles" of rays leaving each camera, adjusted until they agree. Every SfM / SLAM system
+        (COLMAP, ORB-SLAM, …) ends with it.</p>
+    </section>
+
+    <section>
+      <h2>1. The cost</h2>
+      <div class="eq">
+        <div><span class="step">residual</span><span class="mono">rᵢⱼ = π(Kᵢ (Rᵢ Xⱼ + tᵢ)) − xᵢⱼ   (2 numbers, pixels)</span></div>
+        <div><span class="step">cost</span><span class="mono">E(θ) = Σᵢⱼ ‖rᵢⱼ‖²,   θ = (R₁, t₁, …, Rₘ, tₘ, X₁, …, Xₙ)</span></div>
+      </div>
+      <p>This is non-linear least squares in 6m + 3n unknowns. Rotations are updated on the manifold with a small
+        axis-angle vector: <span class="mono">R ← exp([δω]×) R</span>. Under Gaussian pixel noise its minimum is the
+        maximum-likelihood reconstruction.</p>
+    </section>
+
+    <section>
+      <h2>2. Gauss–Newton and Levenberg–Marquardt</h2>
+      <p>Linearize the residuals around the current estimate, <span class="mono">r(θ + δ) ≈ r + J δ</span>, and minimize the quadratic:</p>
+      <div class="eq">
+        <div><span class="step">Gauss–Newton</span><span class="mono">(JᵀJ) δ = −Jᵀ r</span></div>
+        <div><span class="step">Levenberg–Marquardt</span><span class="mono">(JᵀJ + λ diag(JᵀJ)) δ = −Jᵀ r</span></div>
+      </div>
+      <p>Gauss–Newton converges very fast near the solution but can overshoot from a bad start. LM adds damping λ:
+        if a step increases the cost it is rejected and λ grows (shorter, gradient-descent-like steps); if it
+        succeeds λ shrinks (towards Gauss–Newton). The Jacobian here uses finite differences; real solvers (Ceres,
+        g2o, GTSAM) use analytic or automatic derivatives.</p>
+    </section>
+
+    <section>
+      <h2>3. Sparsity and the Schur complement</h2>
+      <p>Each residual depends on one camera and one point only, so <span class="mono">JᵀJ</span> is mostly zeros, with an
+        "arrowhead" pattern: a small camera block, a big block-diagonal point block, and coupling blocks.
+        Eliminating the points first (Schur complement) leaves a system of size 6m instead of 6m + 3n — the reason BA
+        scales to millions of points.</p>
+    </section>
+
+    <section>
+      <h2>4. Gauge freedom</h2>
+      <p>Images do not tell where the world origin is, how it is oriented, or how big the scene is. Rotating, translating
+        or scaling everything together leaves every residual unchanged: 7 degrees of freedom (a similarity) that the
+        cost cannot see. JᵀJ is singular along them. Fixing camera 1 removes 6; the remaining scale is kept in check by the
+        LM damping. Errors to the ground truth are therefore measured after aligning with the best similarity transform.</p>
+    </section>
+
+    <section>
+      <h2>5. Things to try</h2>
+      <ul>
+        <li>Press <b>Run</b> and watch the red residual vectors shrink in each image while the cameras slide into place in 3D.</li>
+        <li>Set σ to 0: the cost goes to essentially 0. With noise it stops at about σ — the reconstruction is as good as the data allows.</li>
+        <li>Increase the initial rotation error to 8–10° and try Gauss–Newton vs LM.</li>
+        <li>Uncheck <b>fix camera 1</b>: camera 1 is optimized too. The cost reaches the same minimum — it cannot see the 7 gauge directions — which is why errors are compared after a similarity alignment.</li>
+      </ul>
+    </section>
+  </article>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>

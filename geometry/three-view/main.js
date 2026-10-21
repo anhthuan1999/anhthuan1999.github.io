@@ -1,14 +1,14 @@
 // Chapter 3: triangulation from three views, noise, baseline and epipolar transfer
-import { THREE, createViewer, CameraRig, setLines } from '../lib/rig.js';
+import { THREE, createViewer, CameraRig, setLines } from '../../shared/lib/rig.js';
 import {
   DEG, add, sub, scale, norm, dot, matVec, lookAtR, makeCamera, project, rayDir,
   fundamental, triangulateDLT, rng,
-} from '../lib/math.js';
+} from '../../shared/lib/math.js';
 import {
   W, H, TARGET, POINTS, EDGES, POINT_COLORS, MONO,
   drawBase, disc, ring, cross2D, drawLine, intersectLines,
-} from '../lib/scene.js';
-import { fmt, vec, sci, matHTML, htmlSetter, buildSliders, initTooltips, initTabs, pickOnCanvas } from '../lib/ui.js';
+} from '../../shared/lib/scene.js';
+import { fmt, vec, sci, matHTML, htmlSetter, buildSliders, initTooltips, initTabs, pickOnCanvas } from '../../shared/lib/ui.js';
 
 const CAM_COLORS = ['#f5c542', '#4fd1c5', '#f472b6'];
 const ELEV_OFFSETS = [0, 12, -5];   // keeps the three centers off one horizontal plane

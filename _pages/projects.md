@@ -1,11 +1,11 @@
 ---
-[comment]: <> layout: page
-title: projects
+layout: page
+title: Projects
 permalink: /projects/
-description: A growing collection of your cool projects.
+description: Research and interactive explainers.
 nav: true
 nav_order: 2
-display_categories: [work, fun]
+display_categories: [research, explainers]
 horizontal: false
 ---
 
@@ -55,4 +55,4 @@ horizontal: false
   </div>
   {%- endif -%}
 {%- endif -%}
-[comment]: <> (</div>)
+</div>
