@@ -524,6 +524,12 @@ footer.sticky-bottom {
 .projects .card img {
   width: 100%;
 }
+.projects .card .card-title {
+  font-size: 1.25rem;
+}
+.projects .card .card-text {
+  font-size: 0.85rem;
+}
 .projects .card-item {
   width: auto;
   margin-bottom: 10px;
