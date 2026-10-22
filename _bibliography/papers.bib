@@ -1,6 +1,15 @@
 ---
 ---
 
+@inproceedings{tran2027settlesplat,
+  title={{SettleSplat: Monocular Gaussian Mapping under In-View Scene Changes}},
+  author={Tran, Anh Thuan and Song, Xiyun and Zhou, Yubin and Yu, Heather and Kosecka, Jana and Peng, Liang},
+  booktitle={WACV},
+  year={2027},
+  selected= true,
+  abstract     = {Online 3D Gaussian mapping enables fast and high-fidelity novel view synthesis, with broad applications in augmented reality, robotics, and autonomous systems. However, many current methods assume static scenes or filter out dynamics as outliers. In this paper, we study in-view scene changes where objects are manipulated in front of the camera within a single online sequence, unlike prior works that detect changes outside the camera view or between separate captures. This setting entangles transient and persistent dynamics, as objects can be distractors while moving and persistent once they settle. While recent studies start to address distractors by removing them for clean static background, in-view scene changes remain underexplored. To resolve this, we present SettleSplat, a monocular mapping system that maintains up-to-date 3D Gaussian maps under such changes. Specifically, we lift coarse per-pixel uncertainty into Gaussian dynamicity field, then prune transient ones. For persistent changes, we derive geometric contradictions weighted by parameter-free rendered depth uncertainty to separate true changes from under-optimized regions. On Bonn and Co-Fusion, SettleSplat achieves consistent 3D Gaussian maps, outperforming current baselines on both full images and change regions while maintaining comparable speed.}
+}
+
 @inproceedings{tran2025varsplat,
   title={{VarSplat: Uncertainty-aware 3D Gaussian Splatting for Robust RGB-D SLAM}},
   author={Tran, Anh Thuan and Kosecka, Jana},
