@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-Served as Graduate Teaching Assistant for CS110 (Essentials of Computer Science) and CS112 (Introduction to Computer Programming) during my first year.
+Served as Graduate Teaching Assistant for CS110 (Essentials of Computer Science) and CS112 (Introduction to Computer Programming) during my first and second years.
