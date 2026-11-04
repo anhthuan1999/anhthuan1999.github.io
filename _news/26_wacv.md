@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-<b>SettleSplat</b> has been accepted at IEEE/CVF WACV 2027.
+<b>SettleSplat</b> has been accepted at IEEE/CVF WACV 2027. [<a href="https://arxiv.org/abs/2611.04195">arXiv</a>]
